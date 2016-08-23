@@ -13,7 +13,7 @@ To simplify deployments.
 * Installation
 
 #+BEGIN_SRC shell
-  gem install stackato-lkg
+  gem install --pre stackato-lkg
 #+END_SRC
 
 * Usage
