@@ -1,0 +1,45 @@
+#+TITLE: Stackato LKG Bootstrap Agent
+#+LATEX: \pagebreak
+
+* Overview
+
+=stackato-lkg= is a tool to automate the setup of a Stackato Cluster from =Last
+Known Good= artifacts.
+
+* Why does this exist?
+
+To simplify deployments.
+
+* Installation
+
+#+BEGIN_SRC shell
+  gem install stackato-lkg
+#+END_SRC
+
+* Usage
+
+Fire up a new session in [[https://github.com/pry/pry][pry]] (or your REPL of choice):
+
+#+BEGIN_SRC shell
+  gem install pry
+  pry
+#+END_SRC
+
+Load the code, and instantiate a =BootstrapAgent=:
+
+#+BEGIN_SRC ruby
+  require 'stackato-lkg'
+
+  agent = StackatoLKG::BootstrapAgent.new
+#+END_SRC
+
+Explore!
+
+* License
+
+  =stackato-lkg= is available under the [[https://tldrlegal.com/license/mit-license][MIT License]]. See ~LICENSE.txt~ for the
+  full text. Stackato has its own license. This tool just deploys it.
+
+* Contributors
+
+  - [[https://colstrom.github.io/][Chris Olstrom]] | [[mailto:chris@olstrom.com][e-mail]] | [[https://twitter.com/ChrisOlstrom][Twitter]]
