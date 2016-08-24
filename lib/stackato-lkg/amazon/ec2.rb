@@ -73,6 +73,16 @@ module StackatoLKG
       end
 
       Contract RespondTo[:to_s], String => String
+      def create_security_group(group_name, vpc_id)
+        call_api(:create_security_group,
+                 group_name: group_name.to_s,
+                 description: group_name.to_s,
+                 vpc_id: vpc_id).group_id
+      rescue ::Aws::EC2::Errors::InvalidGroupDuplicate
+        security_group(group_name.to_s, vpc_id)
+      end
+
+      Contract RespondTo[:to_s], String => String
       def security_group(group_name, vpc_id)
         security_groups
           .select { |sg| sg.vpc_id == vpc_id }
