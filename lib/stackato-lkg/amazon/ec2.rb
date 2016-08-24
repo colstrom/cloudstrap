@@ -72,6 +72,15 @@ module StackatoLKG
         call_api(:create_vpc, cidr_block: config.cidr_block).vpc
       end
 
+      Contract RespondTo[:to_s], String => String
+      def security_group(group_name, vpc_id)
+        security_groups
+          .select { |sg| sg.vpc_id == vpc_id }
+          .select { |sg| sg.group_name == group_name }
+          .first
+          .group_id
+      end
+
       Contract ArrayOf[String], ArrayOf[{ key: String, value: String}] => Bool
       def create_tags(resources, tags)
         call_api(:create_tags, resources: resources, tags: tags).successful?
