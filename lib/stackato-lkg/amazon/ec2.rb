@@ -47,6 +47,16 @@ module StackatoLKG
         @addresses = call_api(:describe_addresses).addresses
       end
 
+      Contract None => ArrayOf[::Aws::EC2::Types::SecurityGroup]
+      def security_groups
+        @security_groups ||= security_groups!
+      end
+
+      Contract None => ArrayOf[::Aws::EC2::Types::SecurityGroup]
+      def security_groups!
+        @security_groups = call_api(:describe_security_groups).security_groups
+      end
+
       Contract None => ArrayOf[::Aws::EC2::Types::TagDescription]
       def tags
         @tags ||= tags!
