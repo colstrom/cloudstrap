@@ -48,6 +48,11 @@ module StackatoLKG
       end
     end
 
+    Contract None => Bool
+    def allow_ssh
+      ec2.authorize_security_group_ingress :tcp, 22, '0.0.0.0/0', jumpbox_security_group
+    end
+
     Contract None => String
     def jumpbox_security_group
       find_jumpbox_security_group || create_jumpbox_security_group
