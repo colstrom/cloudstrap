@@ -30,6 +30,30 @@ module StackatoLKG
     end
 
     Contract None => String
+    def create_jumpbox_security_group
+      cache.store(:jumpbox_security_group, ec2.create_security_group(:jumpbox, vpc)).tap do |sg|
+        ec2.assign_name(tag, sg)
+      end
+    end
+
+    Contract None => Maybe[String]
+    def find_jumpbox_security_group
+      @jumpbox_security_group ||= ENV.fetch('BOOTSTRAP_JUMPBOX_SECURITY_GROUP') do
+        cache.fetch(:jumpbox_security_group) do
+          cache.store :jumpbox_security_group, ec2
+                                           .tagged(type: 'security-group', value: tag)
+                                           .map(&:resource_id)
+                                           .first
+        end
+      end
+    end
+
+    Contract None => String
+    def jumpbox_security_group
+      find_jumpbox_security_group || create_jumpbox_security_group
+    end
+
+    Contract None => String
     def vpc
       find_vpc || create_vpc
     end
