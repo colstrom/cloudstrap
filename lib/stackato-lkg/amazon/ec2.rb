@@ -72,6 +72,19 @@ module StackatoLKG
         call_api(:create_vpc, cidr_block: config.cidr_block).vpc
       end
 
+      Contract RespondTo[:to_s], RespondTo[:to_i], RespondTo[:to_s], String => Bool
+      def authorize_security_group_ingress(ip_protocol, port, cidr_ip, group_id)
+        call_api(:authorize_security_group_ingress,
+                 group_id: group_id,
+                 ip_protocol: ip_protocol.to_s,
+                 from_port: port.to_i,
+                 to_port: port.to_i,
+                 cidr_ip: cidr_ip.to_s
+                ).successful?
+      rescue ::Aws::EC2::Errors::InvalidPermissionDuplicate
+        true
+      end
+
       Contract RespondTo[:to_s], String => String
       def create_security_group(group_name, vpc_id)
         call_api(:create_security_group,
