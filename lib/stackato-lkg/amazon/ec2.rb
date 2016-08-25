@@ -111,6 +111,21 @@ module StackatoLKG
         subnet(properties) || subnet!(properties)
       end
 
+      Contract String => Bool
+      def map_public_ip_on_launch?(subnet_id)
+        subnets(subnet_id: subnet_id)
+          .map { |subnet| subnet.map_public_ip_on_launch }
+          .first == true
+      end
+
+      Contract String, Bool => Bool
+      def map_public_ip_on_launch(subnet_id, value)
+        call_api(:modify_subnet_attribute,
+                 subnet_id: subnet_id,
+                 map_public_ip_on_launch: { value: value }
+                ).successful?
+      end
+
       Contract RespondTo[:to_s], RespondTo[:to_i], RespondTo[:to_s], String => Bool
       def authorize_security_group_ingress(ip_protocol, port, cidr_ip, group_id)
         call_api(:authorize_security_group_ingress,
