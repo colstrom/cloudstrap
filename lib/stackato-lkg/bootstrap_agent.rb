@@ -92,6 +92,11 @@ module StackatoLKG
     end
 
     Contract None => Bool
+    def enable_public_ips
+      ec2.map_public_ip_on_launch?(public_subnet) || ec2.map_public_ip_on_launch(public_subnet, true)
+    end
+
+    Contract None => String
     def vpc
       find_vpc || create_vpc
     end
