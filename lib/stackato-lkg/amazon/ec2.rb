@@ -72,6 +72,45 @@ module StackatoLKG
         call_api(:create_vpc, cidr_block: config.cidr_block).vpc
       end
 
+      Contract KeywordArgs[
+                 cidr_block: Optional[String],
+                 vpc_id: Optional[String],
+                 subnet_id: Optional[String]
+               ] => ArrayOf[::Aws::EC2::Types::Subnet]
+      def subnets(cidr_block: nil, vpc_id: nil, subnet_id: nil)
+        subnets
+          .select { |subnet| subnet_id.nil? || subnet.subnet_id == subnet_id }
+          .select { |subnet| vpc_id.nil? || subnet.vpc_id == vpc_id }
+          .select { |subnet| cidr_block.nil? || subnet.cidr_block == cidr_block }
+      end
+
+      Contract Args[Any] => Any
+      def subnets!(**properties)
+        subnets!
+        subnets(properties)
+      end
+
+      Contract Args[Any] => Maybe[::Aws::EC2::Types::Subnet]
+      def subnet(**properties)
+        subnets(properties).first
+      end
+
+      Contract Args[Any] => Any
+      def subnet!(**properties)
+        subnets!
+        subnet(properties)
+      end
+
+      Contract KeywordArgs[
+                 cidr_block: String,
+                 vpc_id: String
+               ] => ::Aws::EC2::Types::Subnet
+      def create_subnet(**properties)
+        call_api(:create_subnet, properties).subnet
+      rescue ::Aws::EC2::Errors::InvalidSubnetConflict
+        subnet(properties) || subnet!(properties)
+      end
+
       Contract RespondTo[:to_s], RespondTo[:to_i], RespondTo[:to_s], String => Bool
       def authorize_security_group_ingress(ip_protocol, port, cidr_ip, group_id)
         call_api(:authorize_security_group_ingress,
