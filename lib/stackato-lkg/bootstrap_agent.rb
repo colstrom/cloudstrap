@@ -59,6 +59,39 @@ module StackatoLKG
     end
 
     Contract None => String
+    def private_subnet
+      @private_subnet ||= ENV.fetch('BOOTSTRAP_PRIVATE_SUBNET_ID') do
+        cache.fetch(:private_subnet_id) do
+          properties = { vpc_id: vpc, cidr_block: config.private_cidr_block }
+          cache.store(:private_subnet_id, (ec2.subnet(properties) || ec2.create_subnet(properties)).tap do |subnet|
+            assign_name bootstrap_tag, subnet.subnet_id unless subnet.tags.any? do |tag|
+              tag.key == 'Name' && tag.value = bootstrap_tag
+            end
+          end.subnet_id)
+        end
+      end
+    end
+
+    Contract None => String
+    def public_subnet
+      @public_subnet ||= ENV.fetch('BOOTSTRAP_PUBLIC_SUBNET_ID') do
+        cache.fetch(:public_subnet_id) do
+          properties = { vpc_id: vpc, cidr_block: config.public_cidr_block }
+          cache.store(:public_subnet_id, (ec2.subnet(properties) || ec2.create_subnet(properties)).tap do |subnet|
+                        assign_name bootstrap_tag, subnet.subnet_id unless subnet.tags.any? do |tag|
+                          tag.key == 'Name' && tag.value = bootstrap_tag
+                        end
+                      end.subnet_id)
+        end
+      end
+    end
+
+    Contract None => ArrayOf[String]
+    def subnets
+      [public_subnet, private_subnet]
+    end
+
+    Contract None => Bool
     def vpc
       find_vpc || create_vpc
     end
