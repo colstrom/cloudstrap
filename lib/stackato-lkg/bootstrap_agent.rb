@@ -13,7 +13,7 @@ module StackatoLKG
     Contract None => String
     def create_vpc
       cache.store(:vpc_id, ec2.create_vpc.vpc_id).tap do |vpc_id|
-        ec2.assign_name(tag, vpc_id)
+        ec2.assign_name(bootstrap_tag, vpc_id)
       end
     end
 
@@ -22,7 +22,7 @@ module StackatoLKG
       ENV.fetch('BOOTSTRAP_VPC_ID') do
         cache.fetch(:vpc_id) do
           cache.store :vpc_id, ec2
-                               .tagged(type: 'vpc', value: tag)
+                               .tagged(type: 'vpc', value: bootstrap_tag)
                                .map(&:resource_id)
                                .first
         end
@@ -32,7 +32,7 @@ module StackatoLKG
     Contract None => String
     def create_jumpbox_security_group
       cache.store(:jumpbox_security_group, ec2.create_security_group(:jumpbox, vpc)).tap do |sg|
-        ec2.assign_name(tag, sg)
+        ec2.assign_name(bootstrap_tag, sg)
       end
     end
 
@@ -41,7 +41,7 @@ module StackatoLKG
       @jumpbox_security_group ||= ENV.fetch('BOOTSTRAP_JUMPBOX_SECURITY_GROUP') do
         cache.fetch(:jumpbox_security_group) do
           cache.store :jumpbox_security_group, ec2
-                                           .tagged(type: 'security-group', value: tag)
+                                           .tagged(type: 'security-group', value: bootstrap_tag)
                                            .map(&:resource_id)
                                            .first
         end
@@ -64,8 +64,8 @@ module StackatoLKG
     end
 
     Contract None => String
-    def tag
-      @tag ||= ENV.fetch('BOOTSTRAP_TAG') do
+    def bootstrap_tag
+      @bootstrap_tag ||= ENV.fetch('BOOTSTRAP_TAG') do
         "lkg@#{username}/#{uuid}"
       end
     end
