@@ -86,6 +86,20 @@ module StackatoLKG
                   .reject { |image| image.sriov_net_support.nil? }
       end
 
+      Contract RespondTo[:to_s] => ArrayOf[::Aws::EC2::Types::Image]
+      def ubuntu_images(release)
+        images
+          .select { |image| image.name.start_with? 'ubuntu/images/' }
+          .select { |image| image.name.include? release.to_s }
+      end
+
+      Contract RespondTo[:to_s] => ::Aws::EC2::Types::Image
+      def latest_ubuntu(release)
+        ubuntu_images(release)
+          .sort_by { |image| image.creation_date }
+          .last
+      end
+
       Contract None => ArrayOf[::Aws::EC2::Types::KeyPairInfo]
       def key_pairs
         @key_pairs ||= key_pairs!
