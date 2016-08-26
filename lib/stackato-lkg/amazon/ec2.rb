@@ -85,6 +85,13 @@ module StackatoLKG
           .first
       end
 
+      Contract String, String => String
+      def import_key_pair(key_name, public_key_material)
+        call_api(:import_key_pair, key_name: key_name, public_key_material: public_key_material).key_fingerprint
+      rescue ::Aws::EC2::Errors::InvalidKeyPairDuplicate
+        key_fingerprint(key_name)
+      end
+
       Contract None => ::Aws::EC2::Types::Vpc
       def create_vpc
         call_api(:create_vpc, cidr_block: config.cidr_block).vpc
