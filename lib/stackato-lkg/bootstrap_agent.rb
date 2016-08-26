@@ -103,6 +103,15 @@ module StackatoLKG
     end
 
     Contract None => String
+    def ami
+      @ami ||= ENV.fetch('BOOTSTRAP_AMI') do
+        cache.fetch(:ami_id) do
+          cache.store :ami_id, ec2.latest_ubuntu(config.ubuntu_release).image_id
+        end
+      end
+    end
+
+    Contract None => String
     def upload_ssh_key
       ec2.import_key_pair bootstrap_tag, ssh_key.to_s # TODO: Cache this.
     end
