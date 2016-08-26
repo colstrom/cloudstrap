@@ -31,6 +31,44 @@ module StackatoLKG
     end
 
     Contract None => String
+    def internet_gateway
+      find_internet_gateway || create_internet_gateway
+    end
+
+    Contract None => String
+    def create_internet_gateway
+      cache.store(:internet_gateway_id,
+                   ec2.create_internet_gateway.internet_gateway_id
+                  ).tap { |internet_gateway_id| ec2.assign_name bootstrap_tag, internet_gateway_id }
+    end
+
+    Contract None => Maybe[String]
+    def find_internet_gateway
+      ENV.fetch('BOOTSTRAP_INTERNET_GATEWAY_ID') do
+        cache.fetch(:internet_gateway_id) do
+          find_tagged_internet_gateway || find_internet_gateway_for_vpc
+        end
+      end
+    end
+
+    Contract None => Maybe[String]
+    def find_tagged_internet_gateway
+      ec2
+        .tagged(type: 'internet-gateway', value: bootstrap_tag)
+        .map { |resource| resource.resource.id }
+        .first
+    end
+
+    Contract None => Maybe[String]
+    def find_internet_gateway_for_vpc
+      ec2
+        .internet_gateways
+        .select { |gateway| gateway.attachments.any? { |attachment| attachment.vpc_id == vpc } }
+        .map { |gateway| gateway.internet_gateway_id }
+        .first
+    end
+
+    Contract None => String
     def create_jumpbox_security_group
       cache.store(:jumpbox_security_group, ec2.create_security_group(:jumpbox, vpc)).tap do |sg|
         ec2.assign_name(bootstrap_tag, sg)
