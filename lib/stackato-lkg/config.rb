@@ -44,6 +44,15 @@ module StackatoLKG
     end
 
     Contract None => String
+    def ami_owner
+      @ami_owner ||= ENV.fetch('BOOTSTRAP_AMI_OWNER') do
+        config.fetch('ami_owner') do
+          '099720109477'
+        end
+      end
+    end
+
+    Contract None => String
     def ssh_dir
       @ssh_dir ||= File.expand_path(ENV.fetch('BOOTSTRAP_SSH_DIR') do
         [workdir, '.ssh'].join('/')
