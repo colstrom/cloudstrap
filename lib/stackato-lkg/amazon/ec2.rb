@@ -127,7 +127,7 @@ module StackatoLKG
 
       Contract None => ::Aws::EC2::Types::Vpc
       def create_vpc
-        call_api(:create_vpc, cidr_block: config.cidr_block).vpc
+        call_api(:create_vpc, cidr_block: config.vpc_cidr_block).vpc
       end
 
       Contract KeywordArgs[
