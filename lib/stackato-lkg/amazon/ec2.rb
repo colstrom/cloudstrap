@@ -67,6 +67,17 @@ module StackatoLKG
         @tags = call_api(:describe_tags).tags
       end
 
+      Contract KeywordArgs[
+                 image_id: String,
+                 instance_type: String,
+                 key_name: Optional[String],
+                 client_token: Optional[String],
+                 network_interfaces: Optional[ArrayOf[Hash]]
+               ] => ::Aws::EC2::Types::Instance
+      def create_instance(**properties)
+        call_api(:run_instances, properties.merge(min_count: 1, max_count: 2)).instances.first
+      end
+
       Contract None => ArrayOf[::Aws::EC2::Types::Image]
       def images
         @images ||= images!
