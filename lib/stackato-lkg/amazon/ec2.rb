@@ -67,6 +67,25 @@ module StackatoLKG
         @tags = call_api(:describe_tags).tags
       end
 
+      Contract None => ArrayOf[::Aws::EC2::Types::Image]
+      def images
+        @images ||= images!
+      end
+
+      Contract None => ArrayOf[::Aws::EC2::Types::Image]
+      def images!
+        @images ||= call_api(:describe_images,
+                             owners: [config.ami_owner],
+                             filters: [
+                               { name: 'virtualization-type', values: ['hvm'] },
+                               { name: 'architecture', values: ['x86_64'] },
+                               { name: 'root-device-type', values: ['ebs'] },
+                               { name: 'block-device-mapping.volume-type', values: ['gp2'] }
+                             ])
+                  .images
+                  .reject { |image| image.sriov_net_support.nil? }
+      end
+
       Contract None => ArrayOf[::Aws::EC2::Types::KeyPairInfo]
       def key_pairs
         @key_pairs ||= key_pairs!
