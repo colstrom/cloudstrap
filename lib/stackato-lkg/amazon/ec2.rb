@@ -35,6 +35,16 @@ module StackatoLKG
         @route_tables = call_api(:describe_route_tables).route_tables
       end
 
+      Contract None => ArrayOf[::Aws::EC2::Types::InternetGateway]
+      def internet_gateways
+        @internet_gateways ||= internet_gateways!
+      end
+
+      Contract None => ArrayOf[::Aws::EC2::Types::InternetGateway]
+      def internet_gateways!
+        @internet_gateways = call_api(:describe_internet_gateways).internet_gateways
+      end
+
       Contract None => ArrayOf[::Aws::EC2::Types::Instance]
       def instances
         @instances ||= instances!
