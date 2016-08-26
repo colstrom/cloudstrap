@@ -16,4 +16,5 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'contracts', '~> 0.14', '>= 0.14.0'
   gem.add_runtime_dependency 'retries', '~> 0.0.5', '>= 0.0.5'
   gem.add_runtime_dependency 'moneta', '~> 0.8', '>= 0.8.0'
+  gem.add_runtime_dependency 'sshkey', '~> 1.8', '>= 1.8.0'
 end
