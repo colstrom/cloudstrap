@@ -77,6 +77,14 @@ module StackatoLKG
         @key_pairs = call_api(:describe_key_pairs).key_pairs
       end
 
+      Contract String => Maybe[String]
+      def key_fingerprint(key_name)
+        key_pairs
+          .select { |ssh| ssh.key_name == key_name }
+          .map { |ssh| ssh.key_fingerprint }
+          .first
+      end
+
       Contract None => ::Aws::EC2::Types::Vpc
       def create_vpc
         call_api(:create_vpc, cidr_block: config.cidr_block).vpc
