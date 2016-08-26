@@ -43,6 +43,13 @@ module StackatoLKG
       end
     end
 
+    Contract None => String
+    def ssh_dir
+      @ssh_dir ||= File.expand_path(ENV.fetch('BOOTSTRAP_SSH_DIR') do
+        [workdir, '.ssh'].join('/')
+      end)
+    end
+
     private
 
     Contract None => String
