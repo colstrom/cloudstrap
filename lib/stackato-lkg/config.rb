@@ -62,6 +62,15 @@ module StackatoLKG
     end
 
     Contract None => String
+    def instance_type
+      @instance_type ||= ENV.fetch('BOOTSTRAP_INSTANCE_TYPE') do
+        config.fetch('instance_type') do
+          't2.micro'
+        end
+      end
+    end
+
+    Contract None => String
     def ssh_dir
       @ssh_dir ||= File.expand_path(ENV.fetch('BOOTSTRAP_SSH_DIR') do
         [workdir, '.ssh'].join('/')
