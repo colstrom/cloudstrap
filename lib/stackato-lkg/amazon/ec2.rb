@@ -32,7 +32,7 @@ module StackatoLKG
 
       Contract None => ArrayOf[::Aws::EC2::Types::RouteTable]
       def route_tables!
-        @route_tables ||= call_api(:describe_route_tables).route_tables
+        @route_tables = call_api(:describe_route_tables).route_tables
       end
 
       Contract None => ArrayOf[::Aws::EC2::Types::Instance]
