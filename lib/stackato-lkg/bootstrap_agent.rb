@@ -103,6 +103,43 @@ module StackatoLKG
     end
 
     Contract None => String
+    def create_jumpbox
+      upload_ssh_key
+
+     cache.store(:jumpbox_id, ec2.create_instance(
+                   image_id: ami,
+                   instance_type: config.instance_type,
+                   key_name: bootstrap_tag,
+                   client_token: Digest::SHA256.hexdigest(bootstrap_tag),
+                   network_interfaces: [{
+                                          device_index: 0,
+                                          subnet_id: public_subnet,
+                                          associate_public_ip_address: true,
+                                          groups: [jumpbox_security_group]
+                                        }]
+                 ).instance_id).tap do |instance_id|
+       ec2.assign_name bootstrap_tag, instance_id
+     end
+    end
+
+    Contract None => Maybe[String]
+    def find_jumpbox
+      ENV.fetch('BOOTSTRAP_JUMPBOX_ID') do
+        cache.fetch(:jumpbox_id) do
+          ec2
+            .tagged(type: 'instance', value: bootstrap_tag)
+            .map(&:resource_id)
+            .first
+        end
+      end
+    end
+
+    Contract None => String
+    def jumpbox
+      find_jumpbox || create_jumpbox
+    end
+
+    Contract None => String
     def ami
       @ami ||= ENV.fetch('BOOTSTRAP_AMI') do
         cache.fetch(:ami_id) do
