@@ -102,6 +102,11 @@ module StackatoLKG
       find_vpc || create_vpc
     end
 
+    Contract None => String
+    def upload_ssh_key
+      ec2.import_key_pair bootstrap_tag, ssh_key.to_s # TODO: Cache this.
+    end
+
     Contract None => SSH::Key
     def ssh_key
       @ssh_key ||= SSH::Key.new bootstrap_tag
