@@ -53,6 +53,15 @@ module StackatoLKG
     end
 
     Contract None => String
+    def ubuntu_release
+      @distribution ||= ENV.fetch('BOOTSTRAP_UBUNTU_RELEASE') do
+        config.fetch('ubuntu_release') do
+          '14.04'
+        end
+      end
+    end
+
+    Contract None => String
     def ssh_dir
       @ssh_dir ||= File.expand_path(ENV.fetch('BOOTSTRAP_SSH_DIR') do
         [workdir, '.ssh'].join('/')
