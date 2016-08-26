@@ -4,6 +4,7 @@ require 'securerandom'
 
 require_relative 'amazon'
 require_relative 'config'
+require_relative 'ssh'
 
 module StackatoLKG
   class BootstrapAgent
@@ -99,6 +100,11 @@ module StackatoLKG
     Contract None => String
     def vpc
       find_vpc || create_vpc
+    end
+
+    Contract None => SSH::Key
+    def ssh_key
+      @ssh_key ||= SSH::Key.new bootstrap_tag
     end
 
     Contract None => String
