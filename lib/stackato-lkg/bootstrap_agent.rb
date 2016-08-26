@@ -65,7 +65,7 @@ module StackatoLKG
         cache.fetch(:private_subnet_id) do
           properties = { vpc_id: vpc, cidr_block: config.private_cidr_block }
           cache.store(:private_subnet_id, (ec2.subnet(properties) || ec2.create_subnet(properties)).tap do |subnet|
-            assign_name bootstrap_tag, subnet.subnet_id unless subnet.tags.any? do |tag|
+            ec2.assign_name bootstrap_tag, subnet.subnet_id unless subnet.tags.any? do |tag|
               tag.key == 'Name' && tag.value = bootstrap_tag
             end
           end.subnet_id)
@@ -79,7 +79,7 @@ module StackatoLKG
         cache.fetch(:public_subnet_id) do
           properties = { vpc_id: vpc, cidr_block: config.public_cidr_block }
           cache.store(:public_subnet_id, (ec2.subnet(properties) || ec2.create_subnet(properties)).tap do |subnet|
-                        assign_name bootstrap_tag, subnet.subnet_id unless subnet.tags.any? do |tag|
+                        ec2.assign_name bootstrap_tag, subnet.subnet_id unless subnet.tags.any? do |tag|
                           tag.key == 'Name' && tag.value = bootstrap_tag
                         end
                       end.subnet_id)
