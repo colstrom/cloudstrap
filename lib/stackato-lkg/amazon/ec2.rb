@@ -67,6 +67,16 @@ module StackatoLKG
         @tags = call_api(:describe_tags).tags
       end
 
+      Contract None => ArrayOf[::Aws::EC2::Types::KeyPairInfo]
+      def key_pairs
+        @key_pairs ||= key_pairs!
+      end
+
+      Contract None => ArrayOf[::Aws::EC2::Types::KeyPairInfo]
+      def key_pairs!
+        @key_pairs = call_api(:describe_key_pairs).key_pairs
+      end
+
       Contract None => ::Aws::EC2::Types::Vpc
       def create_vpc
         call_api(:create_vpc, cidr_block: config.cidr_block).vpc
