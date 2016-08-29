@@ -50,6 +50,13 @@ module StackatoLKG
         ! internet_gateways.select { |igw| igw.internet_gateway_id == internet_gateway_id }.empty?
       end
 
+      Contract String, String => Bool
+      def internet_gateway_attached?(internet_gateway_id, vpc_id)
+        (internet_gateway_exist?(internet_gateway_id) ? internet_gateways : internet_gateways!)
+          .flat_map { |internet_gateway| internet_gateway.attachments }
+          .any? { |attachment| attachment.vpc_id == vpc_id }
+      end
+
       Contract None => ::Aws::EC2::Types::InternetGateway
       def create_internet_gateway
         call_api(:create_internet_gateway).internet_gateway
