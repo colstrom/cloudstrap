@@ -78,6 +78,15 @@ module StackatoLKG
     end
 
     Contract None => String
+    def ssh_username
+      @ssh_username ||= ENV.fetch('BOOTSTRAP_SSH_USERNAME') do
+        config.fetch('ssh_username') do
+          'ubuntu'
+        end
+      end
+    end
+
+    Contract None => String
     def hdp_dir
       @hdp_dir ||= File.expand_path(ENV.fetch('BOOTSTRAP_HDP_DIR') { dir })
     end
