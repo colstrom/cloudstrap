@@ -125,6 +125,21 @@ module StackatoLKG
       end
     end
 
+    Contract None => String
+    def route_table
+      @route_table ||= ENV.fetch('BOOTSTRAP_ROUTE_TABLE_ID') do
+        cache.fetch(:route_table_id) do
+          cache.store(:route_table_id, ec2
+                                       .route_tables
+                                       .select { |route_table| route_table.vpc_id == vpc }
+                                       .map { |route_table| route_table.route_table_id }
+                                       .first).tap do |route_table_id|
+            ec2.assign_name bootstrap_tag, route_table_id
+          end
+        end
+      end
+    end
+
     Contract None => ArrayOf[String]
     def subnets
       [public_subnet, private_subnet]
