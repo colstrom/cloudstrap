@@ -17,7 +17,7 @@ module StackatoLKG
 
       Contract None => String
       def to_s
-        @key.ssh2_public_key
+        @key.ssh_public_key
       end
 
       Contract None => ::SSHKey
@@ -35,7 +35,7 @@ module StackatoLKG
       Contract ::SSHKey => ::SSHKey
       def save(key)
         FileUtils.mkdir_p dir
-        File.write public_file, key.ssh2_public_key
+        File.write public_file, key.ssh_public_key
         File.write private_file, key.private_key
         File.chmod 0400, private_file
         load!
