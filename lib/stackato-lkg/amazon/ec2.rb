@@ -66,6 +66,14 @@ module StackatoLKG
         internet_gateway_attached? internet_gateway_id, vpc_id
       end
 
+      Contract String, String, String => Bool
+      def create_route(destination_cidr_block, gateway_id, route_table_id)
+        call_api(:create_route,
+                 route_table_id: route_table_id,
+                 destination_cidr_block: destination_cidr_block,
+                 gateway_id: gateway_id).successful?
+      end
+
       Contract None => ::Aws::EC2::Types::InternetGateway
       def create_internet_gateway
         call_api(:create_internet_gateway).internet_gateway
