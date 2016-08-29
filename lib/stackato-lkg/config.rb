@@ -77,6 +77,11 @@ module StackatoLKG
       end)
     end
 
+    Contract None => String
+    def hdp_dir
+      @hdp_dir ||= File.expand_path(ENV.fetch('BOOTSTRAP_HDP_DIR') { dir })
+    end
+
     private
 
     Contract None => String
