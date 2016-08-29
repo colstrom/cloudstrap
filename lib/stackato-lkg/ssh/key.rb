@@ -53,13 +53,6 @@ module StackatoLKG
         File.readable? private_file
       end
 
-      private
-
-      Contract String => Bool
-      def valid?(public_key)
-        ::SSHKey.valid_ssh_public_key? public_key
-      end
-
       Contract None => String
       def public_file
         @public_file ||= [private_file, 'pub'].join('.')
@@ -68,6 +61,13 @@ module StackatoLKG
       Contract None => String
       def private_file
         @private_file ||= [dir, File.basename(@name)].join('/')
+      end
+
+      private
+
+      Contract String => Bool
+      def valid?(public_key)
+        ::SSHKey.valid_ssh_public_key? public_key
       end
 
       Contract None => String
