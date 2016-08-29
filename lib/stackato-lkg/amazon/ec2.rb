@@ -45,6 +45,11 @@ module StackatoLKG
         @internet_gateways = call_api(:describe_internet_gateways).internet_gateways
       end
 
+      Contract String => Bool
+      def internet_gateway_exist?(internet_gateway_id)
+        ! internet_gateways.select { |igw| igw.internet_gateway_id == internet_gateway_id }.empty?
+      end
+
       Contract None => ::Aws::EC2::Types::InternetGateway
       def create_internet_gateway
         call_api(:create_internet_gateway).internet_gateway
