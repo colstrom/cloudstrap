@@ -4,6 +4,7 @@ require 'securerandom'
 
 require_relative 'amazon'
 require_relative 'config'
+require_relative 'hdp/bootstrap_properties'
 require_relative 'ssh'
 
 module StackatoLKG
@@ -259,6 +260,11 @@ module StackatoLKG
     end
 
     private
+
+    Contract None => HDP::BootstrapProperties
+    def bootstrap_properties
+      @hdp ||= HDP::BootstrapProperties.new
+    end
 
     Contract None => Amazon::EC2
     def ec2
