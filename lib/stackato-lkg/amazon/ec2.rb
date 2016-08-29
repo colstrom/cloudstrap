@@ -57,6 +57,15 @@ module StackatoLKG
           .any? { |attachment| attachment.vpc_id == vpc_id }
       end
 
+      Contract String, String => Bool
+      def attach_internet_gateway(internet_gateway_id, vpc_id)
+        call_api(:attach_internet_gateway,
+                 internet_gateway_id: internet_gateway_id,
+                 vpc_id: vpc_id).successful?
+      rescue ::Aws::EC2::Errors::ResourceAlreadyAssociated
+        internet_gateway_attached? internet_gateway_id, vpc_id
+      end
+
       Contract None => ::Aws::EC2::Types::InternetGateway
       def create_internet_gateway
         call_api(:create_internet_gateway).internet_gateway
