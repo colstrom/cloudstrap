@@ -145,6 +145,11 @@ module StackatoLKG
       ec2.attach_internet_gateway internet_gateway, vpc # TODO: Cache this
     end
 
+    Contract None => Bool
+    def default_route
+      ec2.create_route('0.0.0.0/0', internet_gateway, route_table)  # TODO: Cache this
+    end
+
     Contract None => ArrayOf[String]
     def subnets
       [public_subnet, private_subnet]
