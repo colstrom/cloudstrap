@@ -140,6 +140,11 @@ module StackatoLKG
       end
     end
 
+    Contract None => Bool
+    def attach_gateway
+      ec2.attach_internet_gateway internet_gateway, vpc # TODO: Cache this
+    end
+
     Contract None => ArrayOf[String]
     def subnets
       [public_subnet, private_subnet]
