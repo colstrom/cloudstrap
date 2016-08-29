@@ -246,6 +246,18 @@ module StackatoLKG
       end
     end
 
+    def availability_zone
+      @availability_zone ||= ENV.fetch('BOOTSTRAP_AVAILABILITY_ZONE') do
+        cache.fetch(:availability_zone) do
+          cache.store(:availability_zone, ec2
+                                          .subnets
+                                          .select { |subnet| subnet.subnet_id == public_subnet }
+                                          .map { |subnet| subnet.availability_zone }
+                                          .first)
+        end
+      end
+    end
+
     private
 
     Contract None => Amazon::EC2
