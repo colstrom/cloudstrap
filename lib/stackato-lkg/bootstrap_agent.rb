@@ -260,6 +260,21 @@ module StackatoLKG
       end
     end
 
+    Contract None => String
+    def jumpbox_ip
+      @jumpbox_ip ||= ENV.fetch('BOOTSTRAP_JUMPBOX_IP') do
+        cache.fetch(:jumpbox_ip) do
+          cache.store(:jumpbox_ip, ec2
+                                   .instances
+                                   .select { |instance| instance.instance_id == jumpbox }
+                                   .flat_map(&:network_interfaces)
+                                   .map(&:association)
+                                   .map(&:public_ip)
+                                   .first)
+        end
+      end
+    end
+
     Contract None => Any
     def configure_hdp
       bootstrap_properties
