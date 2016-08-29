@@ -247,6 +247,7 @@ module StackatoLKG
       end
     end
 
+    Contract None => String
     def availability_zone
       @availability_zone ||= ENV.fetch('BOOTSTRAP_AVAILABILITY_ZONE') do
         cache.fetch(:availability_zone) do
