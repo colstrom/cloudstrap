@@ -288,6 +288,26 @@ module StackatoLKG
         .save!
     end
 
+    Contract None => Any
+    def configure_jumpbox
+      private_key = ssh_key.private_file
+      properties = bootstrap_properties.file
+
+      ssh.to(jumpbox_ip) do
+        '/home/ubuntu/.ssh/id_rsa'.tap do |target|
+          execute :chmod, '+w', target
+          upload! private_key, target
+          execute :chmod, '-w', target
+        end
+
+        upload! properties, '/home/ubuntu/bootstrap.properties'
+
+        as :root do
+          execute :apt, *%w(install --assume-yes genisoimage)
+        end
+      end
+    end
+
     private
 
     Contract None => SSH::Client
