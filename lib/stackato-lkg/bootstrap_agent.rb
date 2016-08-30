@@ -290,6 +290,11 @@ module StackatoLKG
 
     private
 
+    Contract None => SSH::Client
+    def ssh
+      @ssh ||= SSH::Client.new(ssh_key.private_file)
+    end
+
     Contract None => HDP::BootstrapProperties
     def bootstrap_properties
       @hdp ||= HDP::BootstrapProperties.new
