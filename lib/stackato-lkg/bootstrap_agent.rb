@@ -275,7 +275,7 @@ module StackatoLKG
       end
     end
 
-    Contract None => Any
+    Contract None => Bool
     def configure_hdp
       bootstrap_properties
         .update('AWS.Region', config.region)
