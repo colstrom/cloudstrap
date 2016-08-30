@@ -31,6 +31,9 @@ BOOTSTRAP_INSTANCE_TYPE=#{config.instance_type}
 BOOTSTRAP_SSH_DIR=#{config.ssh_dir}
 BOOTSTRAP_SSH_USERNAME=#{config.ssh_username}
 BOOTSTRAP_HDP_DIR=#{config.hdp_dir}
+BOOTSTRAP_HDP_BOOTSTRAP_ORIGIN=#{config.hdp_origin}
+BOOTSTRAP_HDP_BOOTSTRAP_VERSION=#{config.hdp_version}
+BOOTSTRAP_HDP_BOOTSTRAP_PACKAGE_URL=#{config.hdp_package_url}
 
 # Cached Configuration
 #   These settings can be overridden via ENV only
