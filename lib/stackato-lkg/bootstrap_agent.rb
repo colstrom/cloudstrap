@@ -281,7 +281,7 @@ module StackatoLKG
         .update('AWS.Region', config.region)
         .update('AWS.AvailabilityZones', availability_zone)
         .update('AWS.Keypair', bootstrap_tag)
-        .update('AWS.KeypairFile', 'bootstrap.pem')
+        .update('AWS.KeypairFile', '/home/ubuntu/.ssh/id_rsa')
         .update('AWS.JumpboxCIDR', '0.0.0.0/0')
         .update('AWS.VPCID', vpc)
         .update('AWS.LinuxAMI', ami)
