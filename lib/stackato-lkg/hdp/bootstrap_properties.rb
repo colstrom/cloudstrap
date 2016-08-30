@@ -35,6 +35,11 @@ module StackatoLKG
         JavaProperties.write(properties, file) ? true : false
       end
 
+      Contract None => String
+      def file
+        @file ||= [config.hdp_dir, 'bootstrap.properties'].join('/')
+      end
+
       private
 
       Contract None => Hash
@@ -45,11 +50,6 @@ module StackatoLKG
       Contract None => Hash
       def load!
         @properties = load
-      end
-
-      Contract None => String
-      def file
-        @file ||= [config.hdp_dir, 'bootstrap.properties'].join('/')
       end
 
       Contract None => ::StackatoLKG::Config
