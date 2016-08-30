@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+require 'pastel'
+
 if ENV['HACKING']
   require_relative '../lib/stackato-lkg'
 else
@@ -65,4 +67,14 @@ BOOTSTRAP.JUMPBOX_IP=#{agent.jumpbox_ip}
 
 EOS
 
-agent.configure_jumpbox if agent.jumpbox_running?
+if agent.jumpbox_running?
+  agent.configure_jumpbox
+else
+  STDERR.puts Pastel.new.red <<-EOS
+Your Jumpbox (#{agent.jumpbox}) is not in a "running" state. It is normal for
+the first boot to take several minutes as the instance configures itself.
+
+If you wait a few minutes and try again, it should work.
+EOS
+  abort
+end
