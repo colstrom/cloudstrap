@@ -9,7 +9,7 @@ end
 gem = Gem::Specification
       .find_all_by_name('stackato-lkg')
       .sort_by { |spec| spec.version }
-      .first
+      .last
 
 config = StackatoLKG::Config.new
 agent = StackatoLKG::BootstrapAgent.new
