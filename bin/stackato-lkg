@@ -1,0 +1,61 @@
+#!/usr/bin/env ruby
+
+require 'stackato-lkg'
+
+gem = Gem::Specification
+      .find_all_by_name('stackato-lkg')
+      .sort_by { |spec| spec.version }
+      .first
+
+config = StackatoLKG::Config.new
+agent = StackatoLKG::BootstrapAgent.new
+
+puts <<-EOS
+# Stackato LKG Automated Bootstrap v#{gem.version}
+
+# General Configuration
+#   These settings can be configured via ENV or config.yaml
+
+BOOTSTRAP_REGION=#{config.region}
+BOOTSTRAP_CACHE_PATH=#{config.cache_path}
+BOOTSTRAP_VPC_CIDR_BLOCK=#{config.vpc_cidr_block}
+BOOTSTRAP_PUBLIC_CIDR_BLOCK=#{config.public_cidr_block}
+BOOTSTRAP_PRIVATE_CIDR_BLOCK=#{config.private_cidr_block}
+BOOTSTRAP_AMI_OWNER=#{config.ami_owner}
+BOOTSTRAP_UBUNTU_RELEASE=#{config.ubuntu_release}
+BOOTSTRAP_INSTANCE_TYPE=#{config.instance_type}
+BOOTSTRAP_SSH_DIR=#{config.ssh_dir}
+BOOTSTRAP_SSH_USERNAME=#{config.ssh_username}
+BOOTSTRAP_HDP_DIR=#{config.hdp_dir}
+
+# Cached Configuration
+#   These settings can be overridden via ENV only
+
+BOOTSTRAP_USERNAME=#{agent.username}
+BOOTSTRAP_UUID=#{agent.uuid}
+BOOTSTRAP_TAG=#{agent.bootstrap_tag}
+BOOTSTRAP_AMI=#{agent.ami}
+BOOTSTRAP_VPC_ID=#{agent.vpc}
+BOOTSTRAP_INTERNET_GATEWAY_ID=#{agent.internet_gateway}
+BOOTSTRAP_JUMPBOX_SECURITY_GROUP=#{agent.jumpbox_security_group}
+BOOTSTRAP_PRIVATE_SUBNET_ID=#{agent.private_subnet}
+BOOTSTRAP_PUBLIC_SUBNET_ID=#{agent.public_subnet}
+BOOTSTRAP_ROUTE_TABLE_ID=#{agent.route_table}
+BOOTSTRAP_AVAILABILITY_ZONE=#{agent.availability_zone}
+BOOTSTRAP_JUMPBOX_ID=#{agent.jumpbox}
+BOOTSTRAP.JUMPBOX_IP=#{agent.jumpbox_ip}
+
+# Additional Information
+#   These do not need configuration, and are presented as a debugging checklist
+
+# Public IPs Enabled in Public Subnet? #{agent.enable_public_ips}
+# Gateway Attached to VPC? #{agent.attach_gateway}
+# Route to Internet via Gateway? #{agent.default_route}
+# SSH Allowed to Jumpbox? #{agent.allow_ssh}
+# SSH Key uploaded to AWS? #{agent.upload_ssh_key}
+# HDP bootstrap.properties configured? #{agent.configure_hdp}
+# Jumpbox Running? #{agent.jumpbox_running?}
+
+EOS
+
+agent.configure_jumpbox if agent.jumpbox_running?
