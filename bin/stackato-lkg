@@ -1,6 +1,10 @@
 #!/usr/bin/env ruby
 
-require 'stackato-lkg'
+if ENV['HACKING']
+  require_relative '../lib/stackato-lkg'
+else
+  require 'stackato-lkg'
+end
 
 gem = Gem::Specification
       .find_all_by_name('stackato-lkg')
