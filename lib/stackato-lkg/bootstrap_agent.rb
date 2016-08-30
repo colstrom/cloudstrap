@@ -312,7 +312,7 @@ module StackatoLKG
         upload! properties, '/home/ubuntu/bootstrap.properties'
 
         as :root do
-          execute :apt, *%w(install --assume-yes genisoimage)
+          execute :apt, *%w(install --assume-yes genisoimage aria2)
         end
       end
     end
