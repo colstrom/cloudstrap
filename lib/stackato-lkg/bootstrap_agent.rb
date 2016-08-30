@@ -278,6 +278,7 @@ module StackatoLKG
     Contract None => Bool
     def configure_hdp
       bootstrap_properties
+        .update('Provider', 'AWS')
         .update('AWS.Region', config.region)
         .update('AWS.AvailabilityZones', availability_zone)
         .update('AWS.Keypair', bootstrap_tag)
