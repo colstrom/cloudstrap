@@ -1,4 +1,5 @@
 require 'contracts'
+require 'pastel'
 require 'yaml'
 
 module StackatoLKG
@@ -89,6 +90,34 @@ module StackatoLKG
     Contract None => String
     def hdp_dir
       @hdp_dir ||= File.expand_path(ENV.fetch('BOOTSTRAP_HDP_DIR') { dir })
+    end
+
+    Contract None => String
+    def hdp_origin
+      @hdp_origin ||= ENV.fetch('BOOTSTRAP_HDP_BOOTSTRAP_ORIGIN') do
+        config.fetch('hdp_bootstrap_origin') do
+          'https://s3-us-west-2.amazonaws.com/hcp-concourse'
+        end
+      end
+    end
+
+    Contract None => String
+    def hdp_version
+      @hdp_archive ||= ENV.fetch('BOOTSTRAP_HDP_BOOTSTRAP_VERSION') do
+        config.fetch('hdp_bootstrap_version') do  # TODO: Output colorization should be defined elsewhere.
+          STDERR.puts Pastel.new.yellow '# No version specified for HDP Bootstrap, falling back to default version'
+          '1.2.30+master.77bb464.20160819000448'
+        end
+      end
+    end
+
+    Contract None => String
+    def hdp_package_url
+      @hdp_package_url ||= ENV.fetch('BOOTSTRAP_HDP_BOOTSTRAP_PACKAGE_URL') do
+        config.fetch('hdp_bootstrap_package_url') do
+          "#{hdp_origin}/hcp-bootstrap_#{hdp_version.gsub('+', '%2B')}_amd64.deb"
+        end
+      end
     end
 
     private
