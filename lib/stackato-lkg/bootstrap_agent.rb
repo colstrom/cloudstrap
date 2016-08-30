@@ -301,6 +301,7 @@ module StackatoLKG
     def configure_jumpbox
       private_key = ssh_key.private_file
       properties = bootstrap_properties.file
+      package = config.hdp_package_url
 
       ssh.to(jumpbox_ip) do
         '/home/ubuntu/.ssh/id_rsa'.tap do |target|
@@ -313,6 +314,8 @@ module StackatoLKG
 
         as :root do
           execute :apt, *%w(install --assume-yes genisoimage aria2)
+          execute :aria2c, '--continue=true', '--dir=/opt', '--out=bootstrap.deb', package
+          execute :dpkg, *%w(--install /opt/bootstrap.deb)
         end
       end
     end
