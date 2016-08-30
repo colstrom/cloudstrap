@@ -288,6 +288,15 @@ module StackatoLKG
         .save!
     end
 
+    Contract None => Bool
+    def jumpbox_running?
+      ec2
+        .instances
+        .select { |instance| instance.instance_id == jumpbox }
+        .map { |instance| instance.state.name }
+        .first == 'running'
+    end
+
     Contract None => Any
     def configure_jumpbox
       private_key = ssh_key.private_file
