@@ -53,7 +53,7 @@ BOOTSTRAP_ROUTE_TABLE_ID=#{agent.route_table}
 BOOTSTRAP_PRIVATE_AVAILABILITY_ZONE=#{agent.private_availability_zone}
 BOOTSTRAP_PUBLIC_AVAILABILITY_ZONE=#{agent.public_availability_zone}
 BOOTSTRAP_JUMPBOX_ID=#{agent.jumpbox}
-BOOTSTRAP.JUMPBOX_IP=#{agent.jumpbox_ip}
+BOOTSTRAP_JUMPBOX_IP=#{agent.jumpbox_ip}
 
 # Additional Information
 #   These do not need configuration, and are presented as a debugging checklist
