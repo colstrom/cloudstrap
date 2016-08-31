@@ -294,6 +294,8 @@ module StackatoLKG
         .update('Provider', 'AWS')
         .update('AWS.Region', config.region)
         .update('AWS.AvailabilityZones', public_availability_zone)
+        .update('AWS.PublicSubnetIDsAndAZ', [public_subnet, public_availability_zone].join(':'))
+        .update('AWS.PrivateSubnetIDsAndAZ', [private_subnet, private_availability_zone].join(':'))
         .update('AWS.Keypair', bootstrap_tag)
         .update('AWS.KeypairFile', '/home/ubuntu/.ssh/id_rsa')
         .update('AWS.JumpboxCIDR', '0.0.0.0/0')
