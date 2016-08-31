@@ -336,6 +336,11 @@ module StackatoLKG
       end
     end
 
+    Contract None => Bool
+    def requires_human_oversight?
+      ['false', 'nil', nil].include? ENV['BOOTSTRAP_WITHOUT_HUMAN_OVERSIGHT']
+    end
+
     private
 
     Contract None => SSH::Client
