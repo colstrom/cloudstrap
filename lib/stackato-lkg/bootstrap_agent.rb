@@ -248,12 +248,25 @@ module StackatoLKG
     end
 
     Contract None => String
-    def availability_zone
-      @availability_zone ||= ENV.fetch('BOOTSTRAP_AVAILABILITY_ZONE') do
-        cache.fetch(:availability_zone) do
-          cache.store(:availability_zone, ec2
+    def public_availability_zone
+      @public_availability_zone ||= ENV.fetch('BOOTSTRAP_PUBLIC_AVAILABILITY_ZONE') do
+        cache.fetch(:public_availability_zone) do
+          cache.store(:public_availability_zone, ec2
                                           .subnets
                                           .select { |subnet| subnet.subnet_id == public_subnet }
+                                          .map { |subnet| subnet.availability_zone }
+                                          .first)
+        end
+      end
+    end
+
+    Contract None => String
+    def private_availability_zone
+      @private_availability_zone ||= ENV.fetch('BOOTSTRAP_PRIVATE_AVAILABILITY_ZONE') do
+        cache.fetch(:private_availability_zone) do
+          cache.store(:private_availability_zone, ec2
+                                          .subnets
+                                          .select { |subnet| subnet.subnet_id == private_subnet }
                                           .map { |subnet| subnet.availability_zone }
                                           .first)
         end
@@ -280,7 +293,7 @@ module StackatoLKG
       bootstrap_properties
         .update('Provider', 'AWS')
         .update('AWS.Region', config.region)
-        .update('AWS.AvailabilityZones', availability_zone)
+        .update('AWS.AvailabilityZones', public_availability_zone)
         .update('AWS.Keypair', bootstrap_tag)
         .update('AWS.KeypairFile', '/home/ubuntu/.ssh/id_rsa')
         .update('AWS.JumpboxCIDR', '0.0.0.0/0')
