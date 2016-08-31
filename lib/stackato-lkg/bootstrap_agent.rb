@@ -347,7 +347,6 @@ module StackatoLKG
 
       access_key_id = ec2.api.config.credentials.credentials.access_key_id
       secret_access_key = ec2.api.config.credentials.credentials.secret_access_key
-      humans_want_something_to_do = requires_human_oversight?
 
       ssh.to(jumpbox_ip) do
         with(aws_access_key_id: access_key_id, aws_secret_access_key: secret_access_key) do
