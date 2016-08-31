@@ -69,6 +69,22 @@ EOS
 
 if agent.jumpbox_running?
   agent.configure_jumpbox
+
+  STDERR.puts Pastel.new.green <<-EOS
+
+Contratulations! Your Jumpbox is ready. This instance has been configured with
+everything you need to deploy your very own Stackato. The SSH key used by this
+process has been uploaded to your Jumpbox, along with a bootstrap.properties
+file that has been configured to match the settings used here.
+
+When you are ready to proceed, the following command will do the rest:
+EOS
+
+  STDERR.puts <<-EOS
+ssh -l ubuntu -i #{agent.ssh_key.private_file} #{agent.jumpbox_ip} bootstrap
+
+EOS
+
 else
   STDERR.puts Pastel.new.red <<-EOS
 Your Jumpbox (#{agent.jumpbox}) is not in a "running" state. It is normal for
