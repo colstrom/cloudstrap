@@ -92,6 +92,12 @@ module StackatoLKG
                  route_table_id: route_table_id,
                  destination_cidr_block: destination_cidr_block,
                  gateway_id: gateway_id).successful?
+      rescue ::Aws::EC2::Errors::RouteAlreadyExists
+        route_tables!
+          .select { |route_table| route_table.route_table_id = route_table_id }
+          .flat_map { |route_table| route_table.routes }
+          .select { |route| route.destination_cidr_block == destination_cidr_block }
+          .any? { |route| route.gateway_id == gateway_id || route.nat_gateway_id == gateway_id }
       end
 
       Contract String, String => String
