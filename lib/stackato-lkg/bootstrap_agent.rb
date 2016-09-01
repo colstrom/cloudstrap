@@ -43,6 +43,15 @@ module StackatoLKG
                   ).tap { |internet_gateway_id| ec2.assign_name bootstrap_tag, internet_gateway_id }
     end
 
+    Contract None => String
+    def nat_gateway_ip_allocation
+      ENV.fetch('BOOTSTRAP_NAT_GATEWAY_ALLOCATION_ID') do
+        cache.fetch(:nat_gateway_allocation_id) do
+          cache.store(:nat_gateway_allocation_id, (ec2.unassociated_address || ec2.create_address))
+        end
+      end
+    end
+
     Contract None => Maybe[String]
     def find_internet_gateway
       ENV.fetch('BOOTSTRAP_INTERNET_GATEWAY_ID') do
