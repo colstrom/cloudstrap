@@ -35,6 +35,11 @@ module StackatoLKG
         @route_tables = call_api(:describe_route_tables).route_tables
       end
 
+      Contract String => ::Aws::EC2::Types::RouteTable
+      def create_route_table(vpc_id)
+        call_api(:create_route_table, vpc_id: vpc_id).route_table
+      end
+
       Contract None => ArrayOf[::Aws::EC2::Types::NatGateway]
       def nat_gateways
         @nat_gateways ||= nat_gateways!
