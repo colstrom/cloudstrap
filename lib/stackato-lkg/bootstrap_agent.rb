@@ -421,7 +421,7 @@ module StackatoLKG
 
       ssh.to(jumpbox_ip) do
         with(aws_access_key_id: access_key_id, aws_secret_access_key: secret_access_key) do
-          execute :bootstrap, *%w(install bootstrap.properties 2>&1 | tee bootstrap.log)
+          execute :bootstrap, *%w(install bootstrap.properties)
         end
       end
     end
