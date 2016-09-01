@@ -62,6 +62,7 @@ module StackatoLKG
       ec2
         .nat_gateways
         .select { |nat_gateway| nat_gateway.vpc_id == vpc }
+        .reject { |nat_gateway| %w(failed deleted).include? nat_gateway.state }
         .map { |nat_gateway| nat_gateway.nat_gateway_id }
         .first
     end
