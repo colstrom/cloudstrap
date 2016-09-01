@@ -170,6 +170,7 @@ module StackatoLKG
           cache.store(:route_table_id, ec2
                                        .route_tables
                                        .select { |route_table| route_table.vpc_id == vpc }
+                                       .select { |route_table| route_table.associations.any? { |association| association.main } }
                                        .map { |route_table| route_table.route_table_id }
                                        .first).tap do |route_table_id|
             ec2.assign_name bootstrap_tag, route_table_id
