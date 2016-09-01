@@ -101,6 +101,18 @@ module StackatoLKG
         @addresses = call_api(:describe_addresses).addresses
       end
 
+      Contract None => ArrayOf[::Aws::EC2::Types::Address]
+      def unassociated_addresses
+        addresses
+          .select { |address| address.domain == 'vpc' }
+          .select { |address| address.association_id == nil }
+      end
+
+      Contract None => Maybe[String]
+      def unassociated_address
+        unassociated_addresses.map(&:allocation_id).sample
+      end
+
       Contract None => ArrayOf[::Aws::EC2::Types::SecurityGroup]
       def security_groups
         @security_groups ||= security_groups!
