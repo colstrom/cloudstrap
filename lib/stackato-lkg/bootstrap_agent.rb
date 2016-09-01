@@ -69,6 +69,7 @@ module StackatoLKG
 
     Contract None => String
     def create_nat_gateway
+      attach_gateway unless ec2.internet_gateway_attached?(internet_gateway, vpc)
       ec2.create_nat_gateway(private_subnet, nat_gateway_ip_allocation).nat_gateway_id
     end
 
