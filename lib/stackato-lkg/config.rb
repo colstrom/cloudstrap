@@ -9,7 +9,11 @@ module StackatoLKG
 
     Contract None => String
     def region
-      @region ||= ENV.fetch('BOOTSTRAP_REGION') { config.fetch('region') }
+      @region ||= ENV.fetch('BOOTSTRAP_REGION') do
+        config.fetch('region') do
+          'us-west-2'
+        end
+      end
     end
 
     Contract None => String
