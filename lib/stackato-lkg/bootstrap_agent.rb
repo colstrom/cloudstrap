@@ -211,6 +211,15 @@ module StackatoLKG
       ec2.create_route('0.0.0.0/0', nat_gateway, private_route_table)  # TODO: Cache this
     end
 
+    Contract None => String
+    def nat_route_association
+      @nat_route_association || ENV.fetch('BOOTSTRAP_NAT_ROUTE_ASSOCIATION_ID') do
+        cache.fetch(:nat_route_association_id) do
+          cache.store(:nat_route_association_id, ec2.associate_route_table(private_route_table, private_subnet))
+        end
+      end
+    end
+
     Contract None => ArrayOf[String]
     def subnets
       [public_subnet, private_subnet]
