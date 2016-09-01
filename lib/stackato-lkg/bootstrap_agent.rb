@@ -58,6 +58,29 @@ module StackatoLKG
     end
 
     Contract None => Maybe[String]
+    def find_nat_gateway
+      ec2
+        .nat_gateways
+        .select { |nat_gateway| nat_gateway.vpc_id == vpc }
+        .map { |nat_gateway| nat_gateway.nat_gateway_id }
+        .first
+    end
+
+    Contract None => String
+    def create_nat_gateway
+      ec2.create_nat_gateway(private_subnet, nat_gateway_ip_allocation).nat_gateway_id
+    end
+
+    Contract None => String
+    def nat_gateway
+      ENV.fetch('BOOTSTRAP_NAT_GATEWAY_ID') do
+        cache.fetch(:nat_gateway_id) do
+          cache.store(:nat_gateway_id, (find_nat_gateway || create_nat_gateway))
+        end
+      end
+    end
+
+    Contract None => Maybe[String]
     def find_internet_gateway
       ENV.fetch('BOOTSTRAP_INTERNET_GATEWAY_ID') do
         cache.fetch(:internet_gateway_id) do
