@@ -94,6 +94,13 @@ module StackatoLKG
                  gateway_id: gateway_id).successful?
       end
 
+      Contract String, String => String
+      def associate_route_table(route_table_id, subnet_id)
+        call_api(:associate_route_table,
+                 route_table_id: route_table_id,
+                 subnet_id: subnet_id).association_id
+      end
+
       Contract None => ::Aws::EC2::Types::InternetGateway
       def create_internet_gateway
         call_api(:create_internet_gateway).internet_gateway
