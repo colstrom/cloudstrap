@@ -190,7 +190,7 @@ module StackatoLKG
                .map { |route_table| route_table.route_table_id }
                .first || ec2.create_route_table(vpc).route_table_id
           cache.store(:private_route_table_id, id).tap do |private_route_table_id|
-            ec2.assign_name bootstrap_tag, route_table_id
+            ec2.assign_name bootstrap_tag, private_route_table_id
           end
         end
       end
