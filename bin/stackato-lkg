@@ -46,6 +46,7 @@ BOOTSTRAP_TAG=#{agent.bootstrap_tag}
 BOOTSTRAP_AMI=#{agent.ami}
 BOOTSTRAP_VPC_ID=#{agent.vpc}
 BOOTSTRAP_INTERNET_GATEWAY_ID=#{agent.internet_gateway}
+BOOTSTRAP_NAT_GATEWAY_ID=#{agent.nat_gateway}
 BOOTSTRAP_JUMPBOX_SECURITY_GROUP=#{agent.jumpbox_security_group}
 BOOTSTRAP_PRIVATE_SUBNET_ID=#{agent.private_subnet}
 BOOTSTRAP_PUBLIC_SUBNET_ID=#{agent.public_subnet}
