@@ -206,6 +206,11 @@ module StackatoLKG
       ec2.create_route('0.0.0.0/0', internet_gateway, route_table)  # TODO: Cache this
     end
 
+    Contract None => Bool
+    def nat_route
+      ec2.create_route('0.0.0.0/0', nat_gateway, private_route_table)  # TODO: Cache this
+    end
+
     Contract None => ArrayOf[String]
     def subnets
       [public_subnet, private_subnet]
