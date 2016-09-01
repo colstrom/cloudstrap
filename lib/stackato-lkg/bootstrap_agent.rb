@@ -179,6 +179,23 @@ module StackatoLKG
       end
     end
 
+    Contract None => String
+    def private_route_table
+      @private_route_table ||= ENV.fetch('BOOTSTRAP_PRIVATE_ROUTE_TABLE_ID') do
+        cache.fetch(:private_route_table_id) do
+          id = ec2
+               .route_tables
+               .select { |route_table| route_table.vpc_id == vpc }
+               .reject { |route_table| route_table.associations.any? { |association| association.main } }
+               .map { |route_table| route_table.route_table_id }
+               .first || create_route_table(vpc).route_table_id
+          cache.store(:private_route_table_id, id).tap do |private_route_table_id|
+            ec2.assign_name bootstrap_tag, route_table_id
+          end
+        end
+      end
+    end
+
     Contract None => Bool
     def attach_gateway
       ec2.attach_internet_gateway internet_gateway, vpc # TODO: Cache this
