@@ -113,6 +113,11 @@ module StackatoLKG
         unassociated_addresses.map(&:allocation_id).sample
       end
 
+      Contract None => String
+      def create_address
+        call_api(:allocate_address).allocation_id
+      end
+
       Contract None => ArrayOf[::Aws::EC2::Types::SecurityGroup]
       def security_groups
         @security_groups ||= security_groups!
