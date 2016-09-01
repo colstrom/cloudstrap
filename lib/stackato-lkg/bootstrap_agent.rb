@@ -46,8 +46,13 @@ module StackatoLKG
     Contract None => String
     def nat_gateway_ip_allocation
       ENV.fetch('BOOTSTRAP_NAT_GATEWAY_ALLOCATION_ID') do
-        cache.fetch(:nat_gateway_allocation_id) do
-          cache.store(:nat_gateway_allocation_id, (ec2.unassociated_address || ec2.create_address))
+        cache.fetch(:nat_gateway_allocation_id) do  # TODO: Simplify this.
+          id = ec2
+               .nat_gateways
+               .select { |nat_gateway| nat_gateway.vpc_id == vpc }
+               .flat_map { |nat_gateway| nat_gateway.nat_gateway_addresses.map { |address| address.allocation_id } }
+               .first || ec2.unassociated_address || ec2.create_address
+          cache.store(:nat_gateway_allocation_id, id)
         end
       end
     end
