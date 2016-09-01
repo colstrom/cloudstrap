@@ -151,7 +151,6 @@ module StackatoLKG
       @settings ||= if File.exist?(path)
                       YAML.load_file(path)
                     else
-                      raise ::Errno::ENOENT, path
                       {}
                     end
     end
