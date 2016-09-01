@@ -51,6 +51,7 @@ BOOTSTRAP_JUMPBOX_SECURITY_GROUP=#{agent.jumpbox_security_group}
 BOOTSTRAP_PRIVATE_SUBNET_ID=#{agent.private_subnet}
 BOOTSTRAP_PUBLIC_SUBNET_ID=#{agent.public_subnet}
 BOOTSTRAP_ROUTE_TABLE_ID=#{agent.route_table}
+BOOTSTRAP_PRIVATE_ROUTE_TABLE_ID=#{agent.private_route_table}
 BOOTSTRAP_PRIVATE_AVAILABILITY_ZONE=#{agent.private_availability_zone}
 BOOTSTRAP_PUBLIC_AVAILABILITY_ZONE=#{agent.public_availability_zone}
 BOOTSTRAP_JUMPBOX_ID=#{agent.jumpbox}
