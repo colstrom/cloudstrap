@@ -93,6 +93,7 @@ module StackatoLKG
                  route_table_id: route_table_id,
                  destination_cidr_block: destination_cidr_block,
                  gateway_id: gateway_id).successful?
+          .tap { route_tables! }
       rescue ::Aws::EC2::Errors::RouteAlreadyExists
         route_tables!
           .select { |route_table| route_table.route_table_id = route_table_id }
