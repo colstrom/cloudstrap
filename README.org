@@ -21,7 +21,7 @@ To simplify deployments.
 Simply run the automated bootstrap tool. You can configure it via ENV or =config.yaml=
 
 #+BEGIN_SRC shell
-  stackato-lkg
+ env BOOTSTRAP_WITHOUT_HUMAN_OVERSIGHT=true stackato-lkg stackato-lkg
 #+END_SRC
 
 The output describes the results, and all settings used in the process.
@@ -60,6 +60,7 @@ The output describes the results, and all settings used in the process.
   BOOTSTRAP_AVAILABILITY_ZONE=us-west-2b
   BOOTSTRAP_JUMPBOX_ID=i-051c248563a2c3f54
   BOOTSTRAP.JUMPBOX_IP=52.89.237.123
+  BOOTSTRAP_WITHOUT_HUMAN_OVERSIGHT=true
 
   # Additional Information
   #   These do not need configuration, and are presented as a debugging checklist
@@ -67,19 +68,38 @@ The output describes the results, and all settings used in the process.
   # Public IPs Enabled in Public Subnet? true
   # Gateway Attached to VPC? true
   # Route to Internet via Gateway? true
+  # Route to NAT Gateway from Private Subnet? true
   # SSH Allowed to Jumpbox? true
   # SSH Key uploaded to AWS? 1a:c4:ec:25:94:90:ed:ee:c2:66:2e:3c:9c:c8:7a:12
   # HDP bootstrap.properties configured? true
   # Jumpbox Running? true
 
-    INFO [7217c486] Running /usr/bin/env chmod +w /home/ubuntu/.ssh/id_rsa as ubuntu@52.89.237.123
-    INFO [7217c486] Finished in 0.563 seconds with exit status 0 (successful).
-    INFO Uploading /Users/colstrom/stackato-lkg/.ssh/lkg@colstrom/97cb1464-cf44-479e-be47-9a212131ad4c 100.0%
-    INFO [516c80c4] Running /usr/bin/env chmod -w /home/ubuntu/.ssh/id_rsa as ubuntu@52.89.237.123
-    INFO [516c80c4] Finished in 0.030 seconds with exit status 0 (successful).
-    INFO Uploading /Users/colstrom/stackato-lkg/bootstrap.properties 100.0%
-    INFO [1aefb41d] Running /usr/bin/env apt install --assume-yes genisoimage as ubuntu@52.89.237.123
-    INFO [1aefb41d] Finished in 0.268 seconds with exit status 0 (successful).
+  # No version specified for HDP Bootstrap, falling back to default version
+  INFO [0942f874] Running /usr/bin/env rm -f /home/ubuntu/.ssh/id_rsa as ubuntu@52.89.237.123
+  INFO [0942f874] Finished in 11.547 seconds with exit status 0 (successful).
+  INFO Uploading /Users/colstrom/stackato-lkg/.ssh/lkg@colstrom/97cb1464-cf44-479e-be47-9a212131ad4c 100.0%
+  INFO [bec7b898] Running /usr/bin/env chmod -w /home/ubuntu/.ssh/id_rsa as ubuntu@52.89.237.123
+  INFO [bec7b898] Finished in 0.048 seconds with exit status 0 (successful).
+  INFO Uploading /Users/colstrom/bootstrap.properties 100.0%
+  INFO [e091db46] Running /usr/bin/env apt install --assume-yes genisoimage aria2 as ubuntu@54.89.237.123
+  INFO [e091db46] Finished in 8.157 seconds with exit status 0 (successful).
+  INFO [1fa8cae1] Running /usr/bin/env aria2c --continue=true --dir=/opt --out=bootstrap.deb https://s3-us-west-2.amazonaws.com/hcp-concourse/hcp-bootstrap_1.2.30%2Bmaster.77bb464.20160819000448_amd64.deb as ubuntu@52.89.237.123
+  INFO [1fa8cae1] Finished in 3.395 seconds with exit status 0 (successful).
+  INFO [577d4fdc] Running /usr/bin/env dpkg --install /opt/bootstrap.deb as ubuntu@52.89.237.123
+  INFO [577d4fdc] Finished in 3.055 seconds with exit status 0 (successful).
+
+  Contratulations! Your Jumpbox is ready. This instance has been configured with
+  everything you need to deploy your very own Stackato. The SSH key used by this
+  process has been uploaded to your Jumpbox, along with a bootstrap.properties
+  file that has been configured to match the settings used here.
+
+  Human oversight has been disabled.
+
+  Now would be a good time for tea and swordplay (https://xkcd.com/303/). What
+  happens next is non-interactive and will take approximately 30 minutes.
+
+    INFO [03a68da8] Running /usr/bin/env bootstrap install bootstrap.properties as ubuntu@52.89.237.123
+    INFO [03a68da8] Finished in 1457.406 seconds with exit status 0 (successful).
 #+END_EXAMPLE
 
 * License
