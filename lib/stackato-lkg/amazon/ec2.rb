@@ -154,6 +154,7 @@ module StackatoLKG
       Contract None => String
       def create_address
         call_api(:allocate_address).allocation_id
+          .tap { addresses! }
       end
 
       Contract None => ArrayOf[::Aws::EC2::Types::SecurityGroup]
