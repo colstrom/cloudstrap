@@ -114,6 +114,7 @@ module StackatoLKG
       Contract None => ::Aws::EC2::Types::InternetGateway
       def create_internet_gateway
         call_api(:create_internet_gateway).internet_gateway
+          .tap { internet_gateways! }
       end
 
       Contract None => ArrayOf[::Aws::EC2::Types::Instance]
