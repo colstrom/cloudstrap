@@ -54,6 +54,7 @@ module StackatoLKG
       Contract String, String => ::Aws::EC2::Types::NatGateway
       def create_nat_gateway(subnet_id, allocation_id)
         call_api(:create_nat_gateway, subnet_id: subnet_id, allocation_id: allocation_id).nat_gateway
+          .tap { nat_gateways! }
       end
 
       Contract None => ArrayOf[::Aws::EC2::Types::InternetGateway]
