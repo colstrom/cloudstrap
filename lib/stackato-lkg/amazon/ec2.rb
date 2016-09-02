@@ -106,6 +106,7 @@ module StackatoLKG
         call_api(:associate_route_table,
                  route_table_id: route_table_id,
                  subnet_id: subnet_id).association_id
+          .tap { route_tables! }
       end
 
       Contract None => ::Aws::EC2::Types::InternetGateway
