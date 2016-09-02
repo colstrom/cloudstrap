@@ -319,6 +319,7 @@ module StackatoLKG
                  to_port: port.to_i,
                  cidr_ip: cidr_ip.to_s
                 ).successful?
+          .tap { security_groups! }
       rescue ::Aws::EC2::Errors::InvalidPermissionDuplicate
         true
       end
