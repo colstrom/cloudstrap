@@ -38,6 +38,7 @@ module StackatoLKG
       Contract String => ::Aws::EC2::Types::RouteTable
       def create_route_table(vpc_id)
         call_api(:create_route_table, vpc_id: vpc_id).route_table
+          .tap { route_tables! }
       end
 
       Contract None => ArrayOf[::Aws::EC2::Types::NatGateway]
