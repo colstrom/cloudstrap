@@ -289,6 +289,7 @@ module StackatoLKG
                ] => ::Aws::EC2::Types::Subnet
       def create_subnet(**properties)
         call_api(:create_subnet, properties).subnet
+          .tap { subnets! }
       rescue ::Aws::EC2::Errors::InvalidSubnetConflict
         subnet(properties) || subnet!(properties)
       end
