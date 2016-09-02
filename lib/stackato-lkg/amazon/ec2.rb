@@ -186,6 +186,7 @@ module StackatoLKG
                ] => ::Aws::EC2::Types::Instance
       def create_instance(**properties)
         call_api(:run_instances, properties.merge(min_count: 1, max_count: 2)).instances.first
+          .tap { instances! }
       end
 
       Contract None => ArrayOf[::Aws::EC2::Types::Image]
