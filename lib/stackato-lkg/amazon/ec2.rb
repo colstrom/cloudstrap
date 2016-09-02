@@ -329,6 +329,7 @@ module StackatoLKG
                  group_name: group_name.to_s,
                  description: group_name.to_s,
                  vpc_id: vpc_id).group_id
+          .tap { security_groups! }
       rescue ::Aws::EC2::Errors::InvalidGroupDuplicate
         security_group(group_name.to_s, vpc_id)
       end
