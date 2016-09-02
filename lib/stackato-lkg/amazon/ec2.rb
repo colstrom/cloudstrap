@@ -345,6 +345,7 @@ module StackatoLKG
       Contract ArrayOf[String], ArrayOf[{ key: String, value: String}] => Bool
       def create_tags(resources, tags)
         call_api(:create_tags, resources: resources, tags: tags).successful?
+          .tap { tags! }
       end
 
       Contract String, Args[String] => Bool
