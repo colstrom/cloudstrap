@@ -307,6 +307,7 @@ module StackatoLKG
                  subnet_id: subnet_id,
                  map_public_ip_on_launch: { value: value }
                 ).successful?
+          .tap { subnets! }
       end
 
       Contract RespondTo[:to_s], RespondTo[:to_i], RespondTo[:to_s], String => Bool
