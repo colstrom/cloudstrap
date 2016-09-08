@@ -124,6 +124,15 @@ module StackatoLKG
       end
     end
 
+    Contract None => String
+    def bootstrap_properties_seed_url
+      ENV.fetch('BOOTSTRAP_PROPERTIES_SEED_URL') do
+        config.fetch('bootstrap_properties_seed_url') do
+          'https://s3.amazonaws.com/cnap/alvaro/hdp-resource-manager-0-1-28/bootstrap/sample_bootstrap.properties'
+        end
+      end
+    end
+
     private
 
     Contract None => String
