@@ -37,6 +37,7 @@ BOOTSTRAP_HDP_DIR=#{config.hdp_dir}
 BOOTSTRAP_HDP_BOOTSTRAP_ORIGIN=#{config.hdp_origin}
 BOOTSTRAP_HDP_BOOTSTRAP_VERSION=#{config.hdp_version}
 BOOTSTRAP_HDP_BOOTSTRAP_PACKAGE_URL=#{config.hdp_package_url}
+BOOTSTRAP_PROPERTIES_SEED_URL=#{config.bootstrap_properties_seed_url}
 
 # Cached Configuration
 #   These settings can be overridden via ENV only
