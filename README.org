@@ -1,19 +1,21 @@
-#+TITLE: Stackato LKG Bootstrap Agent
+#+TITLE: Cloudstrap
+#+SUBTITLE: Strapping Boots to Clouds
 #+LATEX: \pagebreak
 
 * Overview
 
-=stackato-lkg= is a tool to automate the setup of a Stackato Cluster from =Last
-Known Good= artifacts.
+=cloudstrap= straps your boots to the cloud. Think of it as sort of a
+meta-bootstrap tool. It handles pre-bootstrapping, primarily. Once complete, you
+should have an environment suitable for launching your bootstrapper.
 
 * Why does this exist?
 
-To simplify deployments.
+To simplify deployment by replacing manual process with glorious automation.
 
 * Installation
 
 #+BEGIN_SRC shell
-  gem install --pre stackato-lkg
+  gem install --pre cloudstrap
 #+END_SRC
 
 * Usage
@@ -21,28 +23,28 @@ To simplify deployments.
 Simply run the automated bootstrap tool. You can configure it via ENV or =config.yaml=
 
 #+BEGIN_SRC shell
- env BOOTSTRAP_WITHOUT_HUMAN_OVERSIGHT=true stackato-lkg stackato-lkg
+ env BOOTSTRAP_WITHOUT_HUMAN_OVERSIGHT=true cloudstrap
 #+END_SRC
 
 The output describes the results, and all settings used in the process.
 
 #+BEGIN_EXAMPLE
-  # Stackato LKG Automated Bootstrap v0.21.0.pre
+  # Cloudstrap v0.28.0.pre
 
   # General Configuration
   #   These settings can be configured via ENV or config.yaml
 
   BOOTSTRAP_REGION=us-west-2
-  BOOTSTRAP_CACHE_PATH=/Users/colstrom/stackato-lkg/.cache
+  BOOTSTRAP_CACHE_PATH=/Users/colstrom/cloudstrap/.cache
   BOOTSTRAP_VPC_CIDR_BLOCK=10.0.0.0/16
   BOOTSTRAP_PUBLIC_CIDR_BLOCK=10.0.0.0/24
   BOOTSTRAP_PRIVATE_CIDR_BLOCK=10.0.1.0/24
   BOOTSTRAP_AMI_OWNER=099720109477
   BOOTSTRAP_UBUNTU_RELEASE=14.04
   BOOTSTRAP_INSTANCE_TYPE=t2.micro
-  BOOTSTRAP_SSH_DIR=/Users/colstrom/stackato-lkg/.ssh
+  BOOTSTRAP_SSH_DIR=/Users/colstrom/cloudstrap/.ssh
   BOOTSTRAP_SSH_USERNAME=ubuntu
-  BOOTSTRAP_HDP_DIR=/Users/colstrom/stackato-lkg
+  BOOTSTRAP_HDP_DIR=/Users/colstrom/cloudstrap
 
   # Cached Configuration
   #   These settings can be overridden via ENV only
@@ -77,7 +79,7 @@ The output describes the results, and all settings used in the process.
   # No version specified for HDP Bootstrap, falling back to default version
   INFO [0942f874] Running /usr/bin/env rm -f /home/ubuntu/.ssh/id_rsa as ubuntu@52.89.237.123
   INFO [0942f874] Finished in 11.547 seconds with exit status 0 (successful).
-  INFO Uploading /Users/colstrom/stackato-lkg/.ssh/lkg@colstrom/97cb1464-cf44-479e-be47-9a212131ad4c 100.0%
+  INFO Uploading /Users/colstrom/cloudstrap/.ssh/lkg@colstrom/97cb1464-cf44-479e-be47-9a212131ad4c 100.0%
   INFO [bec7b898] Running /usr/bin/env chmod -w /home/ubuntu/.ssh/id_rsa as ubuntu@52.89.237.123
   INFO [bec7b898] Finished in 0.048 seconds with exit status 0 (successful).
   INFO Uploading /Users/colstrom/bootstrap.properties 100.0%
@@ -104,8 +106,8 @@ The output describes the results, and all settings used in the process.
 
 * License
 
-  =stackato-lkg= is available under the [[https://tldrlegal.com/license/mit-license][MIT License]]. See ~LICENSE.txt~ for the
-  full text. Stackato has its own license. This tool just deploys it.
+  =cloudstrap= is available under the [[https://tldrlegal.com/license/mit-license][MIT License]]. See ~LICENSE.txt~ for the
+  full text. The software it deploys has its own license.
 
 * Contributors
 
