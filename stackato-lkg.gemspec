@@ -1,11 +1,11 @@
 Gem::Specification.new do |gem|
-  gem.name        = 'stackato-lkg'
+  gem.name        = 'cloudstrap'
   gem.version     = `git describe --tags --abbrev=0`.chomp + '.pre'
   gem.licenses    = 'MIT'
   gem.authors     = ['Chris Olstrom']
   gem.email       = 'chris@olstrom.com'
-  gem.homepage    = 'https://github.com/colstrom/stackato-lkg'
-  gem.summary     = 'Commandline Tool for bootstrapping Stackato 4.x from Last Known Good artifacts'
+  gem.homepage    = 'https://github.com/colstrom/cloudstrap'
+  gem.summary     = 'Strapping Boots to Clouds'
 
   gem.files         = `git ls-files`.split("\n")
   gem.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
