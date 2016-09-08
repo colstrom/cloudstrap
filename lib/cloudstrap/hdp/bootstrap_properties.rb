@@ -42,6 +42,11 @@ module StackatoLKG
 
       private
 
+      Contract None => Bool
+      def exist?
+        File.exist?(file)
+      end
+
       Contract None => Hash
       def load
         JavaProperties.load file
