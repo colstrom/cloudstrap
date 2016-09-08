@@ -3,13 +3,13 @@
 require 'pastel'
 
 if ENV['HACKING']
-  require_relative '../lib/stackato-lkg'
+  require_relative '../lib/cloudstrap'
 else
-  require 'stackato-lkg'
+  require 'cloudstrap'
 end
 
 gem = Gem::Specification
-      .find_all_by_name('stackato-lkg')
+      .find_all_by_name('cloudstrap')
       .sort_by { |spec| spec.version }
       .last
 
@@ -17,7 +17,8 @@ config = StackatoLKG::Config.new
 agent = StackatoLKG::BootstrapAgent.new
 
 puts <<-EOS
-# Stackato LKG Automated Bootstrap v#{gem.version}
+# #{gem.name} v#{gem.version}
+#   #{gem.summary}
 
 # General Configuration
 #   These settings can be configured via ENV or config.yaml
