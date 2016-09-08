@@ -2,6 +2,7 @@ require 'contracts'
 require 'java-properties'
 
 require_relative '../config'
+require_relative '../seed_properties'
 
 module StackatoLKG
   module HDP
@@ -41,6 +42,11 @@ module StackatoLKG
       end
 
       private
+
+      Contract None => ::Cloudstrap::SeedProperties
+      def seed
+        @seed ||= ::Cloudstrap::SeedProperties.new
+      end
 
       Contract None => Bool
       def exist?
