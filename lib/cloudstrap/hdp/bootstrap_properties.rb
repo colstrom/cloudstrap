@@ -55,7 +55,11 @@ module StackatoLKG
 
       Contract None => Hash
       def load
-        JavaProperties.load file
+        if exist?
+          JavaProperties.load file
+        else
+          JavaProperties.parse seed.contents
+        end
       end
 
       Contract None => Hash
