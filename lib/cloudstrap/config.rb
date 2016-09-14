@@ -99,19 +99,14 @@ module StackatoLKG
     Contract None => String
     def hdp_origin
       @hdp_origin ||= ENV.fetch('BOOTSTRAP_HDP_BOOTSTRAP_ORIGIN') do
-        config.fetch('hdp_bootstrap_origin') do
-          'https://s3-us-west-2.amazonaws.com/hcp-concourse'
-        end
+        config.fetch('hdp_bootstrap_origin')
       end
     end
 
     Contract None => String
     def hdp_version
       @hdp_archive ||= ENV.fetch('BOOTSTRAP_HDP_BOOTSTRAP_VERSION') do
-        config.fetch('hdp_bootstrap_version') do  # TODO: Output colorization should be defined elsewhere.
-          STDERR.puts Pastel.new.yellow '# No version specified for HDP Bootstrap, falling back to default version'
-          '1.2.30+master.77bb464.20160819000448'
-        end
+        config.fetch('hdp_bootstrap_version')
       end
     end
 
@@ -127,9 +122,7 @@ module StackatoLKG
     Contract None => String
     def bootstrap_properties_seed_url
       ENV.fetch('BOOTSTRAP_PROPERTIES_SEED_URL') do
-        config.fetch('bootstrap_properties_seed_url') do
-          'https://s3.amazonaws.com/cnap/alvaro/hdp-resource-manager-0-1-28/bootstrap/sample_bootstrap.properties'
-        end
+        config.fetch('bootstrap_properties_seed_url')
       end
     end
 
