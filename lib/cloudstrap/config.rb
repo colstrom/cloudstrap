@@ -138,6 +138,17 @@ module StackatoLKG
       instance_variable_set(key, block_given? ? yield(key) : value)
     end
 
+    Contract RespondTo[:to_s], Maybe[Or[String, StringToString]] => String
+    def lookup(key = __callee__, default = nil)
+      memoize(key) do
+        ENV.fetch("BOOTSTRAP_#{key.to_s.upcase}") do
+          config.fetch(key.to_s) do
+            block_given? ? yield(key) : default
+          end
+        end
+      end
+    end
+
     Contract None => String
     def workdir
       @workdir ||= ENV.fetch('BOOTSTRAP_WORKDIR') { Dir.pwd }
