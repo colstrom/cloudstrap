@@ -61,7 +61,7 @@ The output describes the results, and all settings used in the process.
   BOOTSTRAP_ROUTE_TABLE_ID=rtb-9d28dcfa
   BOOTSTRAP_AVAILABILITY_ZONE=us-west-2b
   BOOTSTRAP_JUMPBOX_ID=i-051c248563a2c3f54
-  BOOTSTRAP.JUMPBOX_IP=52.89.237.123
+  BOOTSTRAP_JUMPBOX_IP=52.89.237.123
   BOOTSTRAP_WITHOUT_HUMAN_OVERSIGHT=true
 
   # Additional Information
