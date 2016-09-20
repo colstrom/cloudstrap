@@ -130,6 +130,14 @@ module StackatoLKG
 
     StringToString = Func[Maybe[String] => Maybe[String]]
 
+    Contract RespondTo[:to_s], Maybe[Or[String, StringToString]] => Maybe[String]
+    def memoize(key, value = nil)
+      key = key.to_s.tap { |k| k.prepend('@') unless k.start_with?('@') }
+      return instance_variable_get(key) if instance_variable_defined?(key)
+
+      instance_variable_set(key, block_given? ? yield(key) : value)
+    end
+
     Contract None => String
     def workdir
       @workdir ||= ENV.fetch('BOOTSTRAP_WORKDIR') { Dir.pwd }
