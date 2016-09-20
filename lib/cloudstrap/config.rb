@@ -128,6 +128,8 @@ module StackatoLKG
 
     private
 
+    StringToString = Func[Maybe[String] => Maybe[String]]
+
     Contract None => String
     def workdir
       @workdir ||= ENV.fetch('BOOTSTRAP_WORKDIR') { Dir.pwd }
