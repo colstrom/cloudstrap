@@ -67,21 +67,27 @@ module StackatoLKG
     end
 
     Contract None => String
-    def hdp_origin
+    def hdp_bootstrap_origin
       lookup :hdp_bootstrap_origin
     end
 
+    alias hdp_origin hdp_bootstrap_origin
+
     Contract None => String
-    def hdp_version
+    def hdp_bootstrap_version
       lookup :hdp_bootstrap_version
     end
 
+    alias hdp_version hdp_bootstrap_version
+
     Contract None => String
-    def hdp_package_url
+    def hdp_bootstrap_package_url
       lookup(:hdp_bootstrap_package_url) do
         "#{hdp_origin}/hcp-bootstrap_#{hdp_version.gsub('+', '%2B')}_amd64.deb"
       end
     end
+
+    alias hdp_package_url hdp_bootstrap_package_url
 
     Contract None => String
     def bootstrap_properties_seed_url
