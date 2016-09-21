@@ -90,8 +90,13 @@ module StackatoLKG
     alias hdp_package_url hdp_bootstrap_package_url
 
     Contract None => String
+    def properties_seed_url
+      lookup :properties_seed_url
+    end
+
+    Contract None => String
     def bootstrap_properties_seed_url
-      lookup :bootstrap_properties_seed_url
+      properties_seed_url
     end
 
     private
