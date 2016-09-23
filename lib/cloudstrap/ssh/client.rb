@@ -13,7 +13,8 @@ module StackatoLKG
           ssh.ssh_options = {
             config: false,
             auth_methods: ['publickey'],
-            keys: private_key
+            keys: private_key,
+            keys_only: true
           }
         end
 
