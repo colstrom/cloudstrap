@@ -15,6 +15,11 @@ module StackatoLKG
         @vpcs = call_api(:describe_vpcs).vpcs
       end
 
+      Contract String => Bool
+      def vpc_supports_dns?(vpc_id)
+        call_api(:describe_vpc_attribute, vpc_id: vpc_id, attribute: "enableDnsSupport").enable_dns_support.value
+      end
+
       Contract None => ArrayOf[::Aws::EC2::Types::Subnet]
       def subnets
         @subnets ||= subnets!
