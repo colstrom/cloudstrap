@@ -18,6 +18,13 @@ module Cloudstrap
         @zones = call_api(:list_hosted_zones).hosted_zones
       end
 
+      Contract String => Maybe[::Aws::Route53::Types::HostedZone]
+      def zone(name)
+        name.tap { |string| string.concat('.') unless string.end_with?('.') }
+
+        zones.find { |zone| zone.name == name }
+      end
+
       private
 
       def client
