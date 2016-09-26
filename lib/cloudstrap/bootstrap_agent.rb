@@ -13,6 +13,12 @@ module StackatoLKG
     include ::Contracts::Core
     include ::Contracts::Builtin
 
+    Contract None => Any
+    def validate_configuration!  # TODO: Does this really belong in BootstrapAgent?
+      return if ec2.valid_region?(config.region)
+      raise ::Cloudstrap::ConfigurationError, "Region #{config.region} is not valid"
+    end
+
     Contract None => String
     def create_vpc
       cache.store(:vpc_id, ec2.create_vpc.vpc_id).tap do |vpc_id|
