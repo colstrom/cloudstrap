@@ -4,6 +4,7 @@ require 'securerandom'
 
 require_relative 'amazon'
 require_relative 'config'
+require_relative 'errors'
 require_relative 'hdp/bootstrap_properties'
 require_relative 'ssh'
 
