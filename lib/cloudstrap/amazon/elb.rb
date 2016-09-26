@@ -25,6 +25,18 @@ module Cloudstrap
 
       Tags = HashOf[String, String]
 
+      Contract None => HashOf[String, Tags]
+      def tags
+        @tags ||= tags!
+      end
+
+      Contract None => HashOf[String, Tags]
+      def tags!
+        @tags = names.each_slice(20).flat_map do |slice|
+          tags(slice)
+        end.reduce(&:merge)
+      end
+
       Contract ArrayOf[String] => HashOf[String, Tags]
       def tags(elb_names)
         describe_tags(*elb_names).each_with_object({}) do |description, hash|
