@@ -20,6 +20,16 @@ module Cloudstrap
 
       Tags = HashOf[String, String]
 
+      Contract Args[String] => HashOf[String, Tags]
+      def tags(*elb_names)
+        describe_tags(*elb_names).each_with_object({}) do |description, hash|
+          hash[description.load_balancer_name] = description
+                                                   .tags
+                                                   .map(&:to_a)
+                                                   .to_h
+        end
+      end
+
       private
 
       Contract Args[String] => ArrayOf[::Aws::ElasticLoadBalancing::Types::TagDescription]
