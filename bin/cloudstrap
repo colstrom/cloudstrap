@@ -65,6 +65,7 @@ BOOTSTRAP_WITHOUT_HUMAN_OVERSIGHT=#{!agent.requires_human_oversight?}
 #   These do not need configuration, and are presented as a debugging checklist
 
 # DNS Support Enabled for VPC? #{agent.enable_dns_support}
+# DNS Hostnames Enabled for VPC? #{agent.enable_dns_hostnames}
 # Public IPs Enabled in Public Subnet? #{agent.enable_public_ips}
 # Gateway Attached to VPC? #{agent.attach_gateway}
 # Route to Internet via Gateway? #{agent.default_route}
