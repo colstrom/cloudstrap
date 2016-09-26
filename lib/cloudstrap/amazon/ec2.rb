@@ -377,6 +377,16 @@ module StackatoLKG
           .select { |tag| value.nil? || tag.value == value }
       end
 
+      Contract None => ArrayOf[::Aws::EC2::Types::Region]
+      def regions
+        @regions ||= regions!
+      end
+
+      Contract None => ArrayOf[::Aws::EC2::Types::Region]
+      def regions!
+        @regions = call_api(:describe_regions).regions
+      end
+
       private
 
       def client
