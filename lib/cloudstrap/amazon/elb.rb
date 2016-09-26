@@ -18,6 +18,8 @@ module Cloudstrap
         @list = call_api(:describe_load_balancers).load_balancer_descriptions
       end
 
+      Tags = HashOf[String, String]
+
       private
 
       Contract Args[String] => ArrayOf[::Aws::ElasticLoadBalancing::Types::TagDescription]
