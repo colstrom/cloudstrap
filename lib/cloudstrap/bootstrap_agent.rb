@@ -255,6 +255,11 @@ module Cloudstrap
       ec2.vpc_supports_dns?(vpc) || ec2.enable_dns_support(vpc)
     end
 
+    Contract None => Bool
+    def enable_dns_hostnames
+      ec2.vpc_supports_dns_hostnames?(vpc) || ec2.enable_dns_hostnames(vpc)
+    end
+
     Contract None => String
     def create_jumpbox
       upload_ssh_key
