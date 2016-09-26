@@ -13,6 +13,12 @@ module StackatoLKG
     include ::Contracts::Core
     include ::Contracts::Builtin
 
+    Contract None => BootstrapAgent
+    def initialize
+      validate_configuration!
+      self
+    end
+
     Contract None => Any
     def validate_configuration!  # TODO: Does this really belong in BootstrapAgent?
       return if ec2.valid_region?(config.region)
