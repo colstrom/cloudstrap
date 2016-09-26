@@ -85,13 +85,13 @@ The output describes the results, and all settings used in the process.
   INFO Uploading /Users/colstrom/bootstrap.properties 100.0%
   INFO [e091db46] Running /usr/bin/env apt install --assume-yes genisoimage aria2 as ubuntu@54.89.237.123
   INFO [e091db46] Finished in 8.157 seconds with exit status 0 (successful).
-  INFO [1fa8cae1] Running /usr/bin/env aria2c --continue=true --dir=/opt --out=bootstrap.deb https://s3-us-west-2.amazonaws.com/hcp-concourse/hcp-bootstrap_1.2.30%2Bmaster.77bb464.20160819000448_amd64.deb as ubuntu@52.89.237.123
+  INFO [1fa8cae1] Running /usr/bin/env aria2c --continue=true --dir=/opt --out=bootstrap.deb as ubuntu@52.89.237.123
   INFO [1fa8cae1] Finished in 3.395 seconds with exit status 0 (successful).
   INFO [577d4fdc] Running /usr/bin/env dpkg --install /opt/bootstrap.deb as ubuntu@52.89.237.123
   INFO [577d4fdc] Finished in 3.055 seconds with exit status 0 (successful).
 
   Contratulations! Your Jumpbox is ready. This instance has been configured with
-  everything you need to deploy your very own Stackato. The SSH key used by this
+  everything you need to deploy your very own cluster. The SSH key used by this
   process has been uploaded to your Jumpbox, along with a bootstrap.properties
   file that has been configured to match the settings used here.
 
