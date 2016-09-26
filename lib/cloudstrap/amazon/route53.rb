@@ -25,6 +25,13 @@ module Cloudstrap
         zones.find { |zone| zone.name == name }
       end
 
+      Contract String => Maybe[String]
+      def zone_id(name)
+        return unless zone = zone(name)
+
+        zone(name).id.split('/').last
+      end
+
       private
 
       def client
