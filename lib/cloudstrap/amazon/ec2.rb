@@ -15,6 +15,11 @@ module Cloudstrap
         @vpcs = call_api(:describe_vpcs).vpcs
       end
 
+      Contract None => Bool
+      def vpc_exists?(vpc_id)
+        vpcs.any? { |vpc| vpc.vpc_id == vpc_id }
+      end
+
       Contract String => Bool
       def vpc_supports_dns?(vpc_id)
         call_api(:describe_vpc_attribute, vpc_id: vpc_id, attribute: "enableDnsSupport").enable_dns_support.value
