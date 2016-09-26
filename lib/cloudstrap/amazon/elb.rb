@@ -18,6 +18,11 @@ module Cloudstrap
         @list = call_api(:describe_load_balancers).load_balancer_descriptions
       end
 
+      Contract None => ArrayOf[String]
+      def names
+        list.map(&:load_balancer_name)
+      end
+
       Tags = HashOf[String, String]
 
       Contract ArrayOf[String] => HashOf[String, Tags]
