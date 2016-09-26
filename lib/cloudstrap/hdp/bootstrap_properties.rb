@@ -4,7 +4,7 @@ require 'java-properties'
 require_relative '../config'
 require_relative '../seed_properties'
 
-module StackatoLKG
+module Cloudstrap
   module HDP
     class BootstrapProperties
       include ::Contracts::Core
@@ -43,9 +43,9 @@ module StackatoLKG
 
       private
 
-      Contract None => ::Cloudstrap::SeedProperties
+      Contract None => SeedProperties
       def seed
-        @seed ||= ::Cloudstrap::SeedProperties.new
+        @seed ||= SeedProperties.new
       end
 
       Contract None => Bool
@@ -67,9 +67,9 @@ module StackatoLKG
         @properties = load
       end
 
-      Contract None => ::StackatoLKG::Config
+      Contract None => Config
       def config
-        @config ||= ::StackatoLKG::Config.new
+        @config ||= Config.new
       end
     end
   end

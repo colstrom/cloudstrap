@@ -1,7 +1,7 @@
 require 'contracts'
 require 'sshkit'
 
-module StackatoLKG
+module Cloudstrap
   module SSH
     class Client
       include ::Contracts::Core
@@ -28,9 +28,9 @@ module StackatoLKG
 
       private
 
-      Contract None => ::StackatoLKG::Config
+      Contract None => Config
       def config
-        @config ||= ::StackatoLKG::Config.new
+        @config ||= Config.new
       end
     end
   end

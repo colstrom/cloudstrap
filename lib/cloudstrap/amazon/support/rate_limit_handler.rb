@@ -2,7 +2,7 @@ require 'aws-sdk'
 require 'contracts'
 require 'retries'
 
-module StackatoLKG
+module Cloudstrap
   module Amazon
     module Support
       module RateLimitHandler

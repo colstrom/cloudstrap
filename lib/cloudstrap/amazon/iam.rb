@@ -2,7 +2,7 @@ require 'aws-sdk'
 require 'contracts'
 require_relative 'service'
 
-module StackatoLKG
+module Cloudstrap
   module Amazon
     class IAM < Service
       Contract None => ::Aws::IAM::Types::User

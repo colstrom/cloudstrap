@@ -2,7 +2,7 @@ require 'contracts'
 require 'pastel'
 require 'yaml'
 
-module StackatoLKG
+module Cloudstrap
   class Config
     include ::Contracts::Core
     include ::Contracts::Builtin

@@ -2,7 +2,7 @@ require 'aws-sdk'
 require 'contracts'
 require_relative 'service'
 
-module StackatoLKG
+module Cloudstrap
   module Amazon
     class EC2 < Service
       Contract None => ArrayOf[::Aws::EC2::Types::Vpc]

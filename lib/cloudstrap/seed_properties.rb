@@ -22,9 +22,9 @@ module Cloudstrap
       @contents ||= connection.body if connection.success?
     end
 
-    Contract None => ::StackatoLKG::Config
+    Contract None => Config
     def config
-      @config ||= ::StackatoLKG::Config.new
+      @config ||= Config.new
     end
   end
 end

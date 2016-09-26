@@ -3,7 +3,7 @@ require 'contracts'
 require_relative 'support/rate_limit_handler'
 require_relative '../config'
 
-module StackatoLKG
+module Cloudstrap
   module Amazon
     class Service
       include ::Contracts::Core

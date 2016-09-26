@@ -8,7 +8,7 @@ require_relative 'errors'
 require_relative 'hdp/bootstrap_properties'
 require_relative 'ssh'
 
-module StackatoLKG
+module Cloudstrap
   class BootstrapAgent
     include ::Contracts::Core
     include ::Contracts::Builtin

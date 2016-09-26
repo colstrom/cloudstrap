@@ -13,8 +13,8 @@ gem = Gem::Specification
       .sort_by { |spec| spec.version }
       .last
 
-config = StackatoLKG::Config.new
-agent = StackatoLKG::BootstrapAgent.new
+config = Cloudstrap::Config.new
+agent = Cloudstrap::BootstrapAgent.new
 
 puts <<-EOS
 # #{gem.name} v#{gem.version}
@@ -82,7 +82,7 @@ if agent.jumpbox_running?
   STDERR.puts Pastel.new.green <<-EOS
 
 Congratulations! Your Jumpbox is ready. This instance has been configured with
-everything you need to deploy your very own Stackato. The SSH key used by this
+everything you need to deploy your very own cluster. The SSH key used by this
 process has been uploaded to your Jumpbox, along with a bootstrap.properties
 file that has been configured to match the settings used here.
 EOS

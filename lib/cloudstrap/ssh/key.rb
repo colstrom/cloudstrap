@@ -2,7 +2,7 @@ require 'contracts'
 require 'sshkey'
 require_relative '../config'
 
-module StackatoLKG
+module Cloudstrap
   module SSH
     class Key
       include ::Contracts::Core
@@ -73,7 +73,7 @@ module StackatoLKG
       Contract None => String
       def dir
         @dir ||= [
-          ::StackatoLKG::Config.new.ssh_dir,
+          Config.new.ssh_dir,
           File.dirname(@name)
         ].join('/')
       end
