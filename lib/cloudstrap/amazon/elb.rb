@@ -47,6 +47,14 @@ module Cloudstrap
         end
       end
 
+      Contract String => HashOf[String, ::Aws::ElasticLoadBalancing::Types::LoadBalancerDescription]
+      def tagged(key)
+        tags.map do |name, tags|
+          next unless tags[key]
+          { tags[key] => list.find { |elb| elb.load_balancer_name == name } }
+        end.compact.reduce(&:merge)
+      end
+
       private
 
       Contract Args[String] => ArrayOf[::Aws::ElasticLoadBalancing::Types::TagDescription]
