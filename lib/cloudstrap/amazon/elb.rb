@@ -20,6 +20,11 @@ module Cloudstrap
 
       private
 
+      Contract Args[String] => ArrayOf[::Aws::ElasticLoadBalancing::Types::TagDescription]
+      def describe_tags(*elb_names)
+        call_api(:describe_tags, load_balancer_names: elb_names).tag_descriptions
+      end
+
       def client
         ::Aws::ElasticLoadBalancing::Client
       end
