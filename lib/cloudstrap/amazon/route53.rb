@@ -20,7 +20,7 @@ module Cloudstrap
 
       Contract String => Maybe[::Aws::Route53::Types::HostedZone]
       def zone(name)
-        name.tap { |string| string.concat('.') unless string.end_with?('.') }
+        name = name.end_with?('.') ? name : name.dup.concat('.')
 
         zones.find { |zone| zone.name == name }
       end
