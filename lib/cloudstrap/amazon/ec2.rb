@@ -392,6 +392,11 @@ module StackatoLKG
         regions.map(&:region_name)
       end
 
+      Contract String => Bool
+      def valid_region?(region_name)
+        region_names.include? region_name
+      end
+
       private
 
       def client
