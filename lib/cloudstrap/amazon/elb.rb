@@ -8,6 +8,16 @@ module Cloudstrap
       include ::Contracts::Core
       include ::Contracts::Builtin
 
+      Contract None => ArrayOf[::Aws::ElasticLoadBalancing::Types::LoadBalancerDescription]
+      def list
+        @list ||= list!
+      end
+
+      Contract None => ArrayOf[::Aws::ElasticLoadBalancing::Types::LoadBalancerDescription]
+      def list!
+        @list = call_api(:describe_load_balancers).load_balancer_descriptions
+      end
+
       private
 
       def client
