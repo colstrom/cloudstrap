@@ -19,7 +19,10 @@ module Cloudstrap
         Contract Symbol, Args[Any] => Any
         def call_api(method, *args)
           with_retries(
-            rescue: Aws::EC2::Errors::RequestLimitExceeded,
+            rescue: [
+              Aws::EC2::Errors::RequestLimitExceeded,
+              Aws::Route53::Errors::ThrottlingException
+            ],
             handler: request_limit_exceeded_handler,
             base_sleep_seconds: 1.0,
             max_sleep_seconds: 8.0
