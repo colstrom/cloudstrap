@@ -387,6 +387,11 @@ module StackatoLKG
         @regions = call_api(:describe_regions).regions
       end
 
+      Contract None => ArrayOf[String]
+      def region_names
+        regions.map(&:region_name)
+      end
+
       private
 
       def client
