@@ -297,6 +297,11 @@ module Cloudstrap
       find_jumpbox || create_jumpbox
     end
 
+    Contract None => Bool
+    def tag_jumpbox
+      ec2.create_tags([jumpbox], [{ key: 'Cloudstrapped', value: 'true' }])
+    end
+
     Contract None => String
     def ami
       @ami ||= ENV.fetch('BOOTSTRAP_AMI') do
