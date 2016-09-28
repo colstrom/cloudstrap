@@ -73,6 +73,7 @@ BOOTSTRAP_WITHOUT_HUMAN_OVERSIGHT=#{!agent.requires_human_oversight?}
 # SSH Allowed to Jumpbox? #{agent.allow_ssh}
 # SSH Key uploaded to AWS? #{agent.upload_ssh_key}
 # HDP bootstrap.properties configured? #{agent.configure_hdp}
+# Jumpbox Tagged? #{agent.tag_jumpbox}
 # Jumpbox Running? #{agent.jumpbox_running?}
 
 EOS
