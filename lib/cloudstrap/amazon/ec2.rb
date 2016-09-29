@@ -210,7 +210,7 @@ module Cloudstrap
                  network_interfaces: Optional[ArrayOf[Hash]]
                ] => ::Aws::EC2::Types::Instance
       def create_instance(**properties)
-        call_api(:run_instances, properties.merge(min_count: 1, max_count: 2)).instances.first
+        call_api(:run_instances, properties.merge(min_count: 1, max_count: 1)).instances.first
           .tap { instances! }
       end
 
