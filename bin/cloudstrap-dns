@@ -1,0 +1,99 @@
+#!/usr/bin/env ruby
+
+require 'burdened-acrobat'
+require 'path53'
+require 'pastel'
+
+if ENV['HACKING']
+  require_relative '../lib/cloudstrap'
+else
+  require 'cloudstrap'
+end
+
+gem = Gem::Specification
+      .find_all_by_name('cloudstrap')
+      .sort_by { |spec| spec.version }
+      .last
+
+puts <<-EOS
+# #{gem.name} v#{gem.version}
+#   #{gem.summary}
+EOS
+
+route53 = Cloudstrap::Amazon::Route53.new
+config = Cloudstrap::Config.new
+
+DOMAIN = ENV.fetch('CLOUDSTRAP_DOMAIN') { ARGV.first }
+VPC = ENV.fetch('CLOUDSTRAP_VPC_ID') { ARGV.last }
+
+abort "usage: #{$PROGRAM_NAME} <domain> <vpc>" if [DOMAIN, VPC].any?(&:nil?)
+
+ZONE = route53.zone(DOMAIN)
+
+ZONE_ID = route53.zone_id(DOMAIN)
+abort "Invalid Zone: #{DOMAIN}" unless ZONE_ID
+
+load_balancers = BurdenedAcrobat::LoadBalancers.new
+
+elbs = load_balancers.search { tagged('KubernetesCluster') & with(VPC) }
+abort "No clusters found in #{vpc_id}. Unable to proceed." if elbs.empty?
+
+clusters = load_balancers.tags(elbs).flat_map do |lb|
+  lb.tags.select { |tag| tag.key == 'KubernetesCluster' }.map(&:value)
+end.uniq
+
+begin
+  CLUSTER = (clusters.size == 1) ? clusters.first : ENV.fetch('CLOUDSTRAP_KUBERNETES_CLUSTER')
+rescue KeyError
+  pastel = Pastel.new
+  STDERR.puts <<-EOS
+
+  #{$PROGRAM_NAME} is confused and needs your help!
+
+  #{pastel.red "Multiple clusters found in #{pastel.bold VPC}:"}
+
+  #{clusters.map { |cluster| " * #{cluster}\n" }.join.chomp}
+
+  Set the environment variable #{pastel.bold("CLOUDSTRAP_KUBERNETES_CLUSTER")}
+  to the correct cluster, and invoke #{$PROGRAM_NAME} again.
+
+EOS
+  abort
+end
+
+services = load_balancers
+             .search { tags(with(VPC) & tagged('KubernetesCluster', CLUSTER)) }
+             .map do |lb|
+               [
+                 lb.tags.find { |tag| tag.key == 'kubernetes.io/service-name' }.value,
+                 load_balancers.named([lb.load_balancer_name])
+               ]
+             end.to_h
+
+hcp = services.fetch('hcp/ipmgr').first
+identity = services.fetch('hcp/ident-api').first
+hsm = services.fetch('hcp/hsm-server').first
+
+puts <<-EOS
+# Configuring the following DNS records...
+
+hcp.aws.#{DOMAIN} IN A #{hcp.canonical_hosted_zone_name} # #{hcp.canonical_hosted_zone_name_id}
+hsm.aws.#{DOMAIN} IN A #{hsm.canonical_hosted_zone_name}
+identity.aws.#{DOMAIN} IN A #{identity.canonical_hosted_zone_name}
+*.identity.aws.#{DOMAIN} IN CNAME identity.aws.#{DOMAIN}
+
+EOS
+
+change = Path53.change(ZONE).batch do
+  add a 'hcp.aws.@', hcp
+  add a 'hsm.aws.@', hsm
+  add a 'identity.aws.@', identity
+  add cname '*.identity.aws.@', 'identity.aws.@'
+end.apply!
+
+loop do
+  info = route53.api.get_change(id: change).change_info
+  STDERR.puts "#{change} is #{info.status}"
+
+  (info.status == 'PENDING') ? sleep(4) : break
+end
