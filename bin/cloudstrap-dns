@@ -33,7 +33,7 @@ VPC = ENV.fetch('CLOUDSTRAP_VPC_ID') { cache.fetch :vpc_id }
 
 abort "VPC ID missing from cache. Have you run cloudstrap yet?" if VPC.nil?
 
-ZONE = route53.zone(DOMAIN)
+ZONE = route53.zone(route53.longest_matching_suffix(DOMAIN) || '')
 
 abort "Invalid Zone: #{DOMAIN}" unless ZONE
 
