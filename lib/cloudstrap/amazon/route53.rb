@@ -26,6 +26,25 @@ module Cloudstrap
       end
 
       Contract String => Maybe[String]
+      def longest_matching_suffix(name)
+        candidates = {}
+        name.split('.').reverse.reduce('') do |domain, fragment|
+          [fragment, domain].join('.').tap do |suffix|
+            candidates[suffix] = zones.select do |zone|
+              zone.name.end_with? suffix
+            end
+          end
+        end
+
+        longest = candidates
+          .reject { |_, zones| zones.empty? }
+          .sort_by { |name, _| name.length }
+          .last
+
+        longest ? longest.first : nil
+      end
+
+      Contract String => Maybe[String]
       def zone_id(name)
         return unless zone = zone(name)
 
