@@ -99,6 +99,11 @@ module Cloudstrap
       properties_seed_url
     end
 
+    Contract None => String
+    def domain_name
+      required :domain_name
+    end
+
     private
 
     Contract None => ::Pastel::Delegator
