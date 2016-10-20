@@ -23,7 +23,7 @@ EOS
 route53 = Cloudstrap::Amazon::Route53.new
 config = Cloudstrap::Config.new
 
-DOMAIN = ENV.fetch('CLOUDSTRAP_DOMAIN') { ARGV.first }
+DOMAIN = ENV.fetch('CLOUDSTRAP_DOMAIN') { config.domain_name }
 VPC = ENV.fetch('CLOUDSTRAP_VPC_ID') { ARGV.last }
 
 abort "usage: #{$PROGRAM_NAME} <domain> <vpc>" if [DOMAIN, VPC].any?(&:nil?)
