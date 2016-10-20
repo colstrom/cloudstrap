@@ -101,6 +101,11 @@ module Cloudstrap
 
     private
 
+    Contract None => ::Pastel::Delegator
+    def pastel
+      @pastel ||= Pastel.new
+    end
+
     StringToString = Func[Maybe[String] => Maybe[String]]
 
     Contract RespondTo[:to_s], Maybe[Or[String, StringToString]] => Maybe[String]
