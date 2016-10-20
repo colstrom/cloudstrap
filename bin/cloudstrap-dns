@@ -82,18 +82,18 @@ hsm = services.fetch('hcp/hsm-server').first
 puts <<-EOS
 # Configuring the following DNS records...
 
-hcp.aws.#{DOMAIN} IN A #{hcp.canonical_hosted_zone_name}
-hsm.aws.#{DOMAIN} IN A #{hsm.canonical_hosted_zone_name}
-identity.aws.#{DOMAIN} IN A #{identity.canonical_hosted_zone_name}
-*.identity.aws.#{DOMAIN} IN CNAME identity.aws.#{DOMAIN}
+hcp.#{DOMAIN} IN A #{hcp.canonical_hosted_zone_name}
+hsm.#{DOMAIN} IN A #{hsm.canonical_hosted_zone_name}
+identity.#{DOMAIN} IN A #{identity.canonical_hosted_zone_name}
+*.identity.#{DOMAIN} IN CNAME identity.#{DOMAIN}
 
 EOS
 
 change = Path53.change(ZONE).batch do
-  add a 'hcp.aws.@', hcp
-  add a 'hsm.aws.@', hsm
-  add a 'identity.aws.@', identity
-  add cname '*.identity.aws.@', 'identity.aws.@'
+  add a 'hcp.@', hcp
+  add a 'hsm.@', hsm
+  add a 'identity.@', identity
+  add cname '*.identity.@', 'identity.@'
 end.apply!
 
 loop do
