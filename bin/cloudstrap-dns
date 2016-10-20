@@ -89,10 +89,10 @@ identity.#{DOMAIN} IN A #{identity.canonical_hosted_zone_name}
 EOS
 
 change = Path53.change(ZONE).batch do
-  add a 'hcp.@', hcp
-  add a 'hsm.@', hsm
-  add a 'identity.@', identity
-  add cname '*.identity.@', 'identity.@'
+  add a "hcp.#{DOMAIN}", hcp
+  add a "hsm.#{DOMAIN}", hsm
+  add a "identity.#{DOMAIN}", identity
+  add cname "*.identity.#{DOMAIN}", "identity.#{DOMAIN}"
 end.apply!
 
 loop do
