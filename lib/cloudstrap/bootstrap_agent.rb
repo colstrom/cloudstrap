@@ -429,6 +429,7 @@ module Cloudstrap
 
         as :root do
           execute :apt, *%w(install --assume-yes genisoimage aria2)
+          execute :rm, '-f', '/opt/bootstrap.deb'
           execute :aria2c, '--continue=true', '--dir=/opt', '--out=bootstrap.deb', package
           execute :dpkg, *%w(--install /opt/bootstrap.deb)
         end
