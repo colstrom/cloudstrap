@@ -31,7 +31,7 @@ module Cloudstrap
         name.split('.').reverse.reduce('') do |domain, fragment|
           [fragment, domain].join('.').tap do |suffix|
             candidates[suffix] = zones.select do |zone|
-              zone.name.end_with? suffix
+              zone.name == suffix
             end
           end
         end
