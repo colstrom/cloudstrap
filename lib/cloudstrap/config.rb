@@ -118,6 +118,11 @@ EOS
       abort
     end
 
+    Contract RespondTo[:to_s] => String
+    def required(key)
+      lookup(key, '').tap { |value| abort_on_missing key if value.empty? }
+    end
+
     StringToString = Func[Maybe[String] => Maybe[String]]
 
     Contract RespondTo[:to_s], Maybe[Or[String, StringToString]] => Maybe[String]
