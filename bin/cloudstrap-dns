@@ -82,7 +82,7 @@ hsm = services.fetch('hcp/hsm-server').first
 puts <<-EOS
 # Configuring the following DNS records...
 
-hcp.aws.#{DOMAIN} IN A #{hcp.canonical_hosted_zone_name} # #{hcp.canonical_hosted_zone_name_id}
+hcp.aws.#{DOMAIN} IN A #{hcp.canonical_hosted_zone_name}
 hsm.aws.#{DOMAIN} IN A #{hsm.canonical_hosted_zone_name}
 identity.aws.#{DOMAIN} IN A #{identity.canonical_hosted_zone_name}
 *.identity.aws.#{DOMAIN} IN CNAME identity.aws.#{DOMAIN}
