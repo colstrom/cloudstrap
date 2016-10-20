@@ -31,7 +31,7 @@ cache = Moneta.new :File, dir: config.cache_path
 DOMAIN = ENV.fetch('CLOUDSTRAP_DOMAIN') { config.domain_name }
 VPC = ENV.fetch('CLOUDSTRAP_VPC_ID') { cache.fetch :vpc_id }
 
-abort "usage: #{$PROGRAM_NAME} <domain> <vpc>" if [DOMAIN, VPC].any?(&:nil?)
+abort "VPC ID missing from cache. Have you run cloudstrap yet?" if VPC.nil?
 
 ZONE = route53.zone(DOMAIN)
 
