@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'burdened-acrobat'
+require 'moneta'
 require 'path53'
 require 'pastel'
 
