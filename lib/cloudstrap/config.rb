@@ -106,6 +106,18 @@ module Cloudstrap
       @pastel ||= Pastel.new
     end
 
+    Contract RespondTo[:to_s] => nil
+    def abort_on_missing(key)
+      STDERR.puts pastel.red <<EOS
+
+#{pastel.bold key} is required, but is not configured.
+
+You can resolve this by adding it to #{pastel.bold file}, or by
+setting #{pastel.bold('BOOTSTRAP_' + key.to_s.upcase)} in the environment.
+EOS
+      abort
+    end
+
     StringToString = Func[Maybe[String] => Maybe[String]]
 
     Contract RespondTo[:to_s], Maybe[Or[String, StringToString]] => Maybe[String]
