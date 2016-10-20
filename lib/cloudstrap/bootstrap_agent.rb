@@ -400,6 +400,7 @@ module Cloudstrap
         .update('AWS.JumpboxCIDR', '0.0.0.0/0')
         .update('AWS.VPCID', vpc)
         .update('AWS.LinuxAMI', ami)
+        .upcase('HCPDomainName', config.domain_name)
         .save!
     end
 
