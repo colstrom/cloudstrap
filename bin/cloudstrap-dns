@@ -35,8 +35,7 @@ abort "VPC ID missing from cache. Have you run cloudstrap yet?" if VPC.nil?
 
 ZONE = route53.zone(DOMAIN)
 
-ZONE_ID = route53.zone_id(DOMAIN)
-abort "Invalid Zone: #{DOMAIN}" unless ZONE_ID
+abort "Invalid Zone: #{DOMAIN}" unless ZONE
 
 load_balancers = BurdenedAcrobat::LoadBalancers.new
 
