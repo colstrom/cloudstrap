@@ -25,6 +25,11 @@ module Cloudstrap
         zones.find { |zone| zone.name == name }
       end
 
+      Contract String => ArrayOf[::Aws::Route53::Types::HostedZone]
+      def zone_names
+        @zone_names ||= zones.map(&:name)
+      end
+
       Contract String => Maybe[String]
       def longest_matching_suffix(name)
         fragments = name.split '.'
