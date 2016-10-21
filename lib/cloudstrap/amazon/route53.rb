@@ -27,21 +27,11 @@ module Cloudstrap
 
       Contract String => Maybe[String]
       def longest_matching_suffix(name)
-        candidates = {}
-        name.split('.').reverse.reduce('') do |domain, fragment|
-          [fragment, domain].join('.').tap do |suffix|
-            candidates[suffix] = zones.select do |zone|
-              zone.name == suffix
-            end
-          end
-        end
-
-        longest = candidates
-          .reject { |_, zones| zones.empty? }
-          .sort_by { |name, _| name.length }
-          .last
-
-        longest ? longest.first : nil
+        fragments = name.split '.'
+        fragments
+          .each_with_index
+          .map { |_, i| fragments.drop(i).join('.') + '.' }
+          .find { |fragment| zones.map(&:name).include? fragment }
       end
 
       Contract String => Maybe[String]
