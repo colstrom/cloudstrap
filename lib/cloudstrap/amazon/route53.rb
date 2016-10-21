@@ -36,7 +36,7 @@ module Cloudstrap
         fragments
           .each_with_index
           .map { |_, i| fragments.drop(i).join('.') + '.' }
-          .find { |fragment| zones.map(&:name).include? fragment }
+          .find { |fragment| zone_names.include? fragment }
       end
 
       Contract String => Maybe[String]
