@@ -25,7 +25,7 @@ module Cloudstrap
         zones.find { |zone| zone.name == name }
       end
 
-      Contract String => ArrayOf[::Aws::Route53::Types::HostedZone]
+      Contract String => ArrayOf[String]
       def zone_names
         @zone_names ||= zones.map(&:name)
       end
