@@ -94,7 +94,7 @@ module Cloudstrap
 
     Contract None => String
     def properties_seed_url
-      required :properties_seed_url
+      lookup(:properties_seed_url) { '' }
     end
 
     Contract None => String
