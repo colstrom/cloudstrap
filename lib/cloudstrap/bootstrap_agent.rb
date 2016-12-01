@@ -390,17 +390,17 @@ module Cloudstrap
     Contract None => Bool
     def configure_hdp
       bootstrap_properties
-        .update('Provider', 'AWS')
-        .update('AWS.Region', config.region)
-        .update('AWS.AvailabilityZones', public_availability_zone)
-        .update('AWS.PublicSubnetIDsAndAZ', [public_subnet, public_availability_zone].join(':'))
-        .update('AWS.PrivateSubnetIDsAndAZ', [private_subnet, private_availability_zone].join(':'))
-        .update('AWS.Keypair', bootstrap_tag)
-        .update('AWS.KeypairFile', '/home/ubuntu/.ssh/id_rsa')
-        .update('AWS.JumpboxCIDR', '0.0.0.0/0')
-        .update('AWS.VPCID', vpc)
-        .update('AWS.LinuxAMI', ami)
-        .update('HCPDomainName', config.domain_name)
+        .define('Provider', 'AWS')
+        .define('AWS.Region', config.region)
+        .define('AWS.AvailabilityZones', public_availability_zone)
+        .define('AWS.PublicSubnetIDsAndAZ', [public_subnet, public_availability_zone].join(':'))
+        .define('AWS.PrivateSubnetIDsAndAZ', [private_subnet, private_availability_zone].join(':'))
+        .define('AWS.Keypair', bootstrap_tag)
+        .define('AWS.KeypairFile', '/home/ubuntu/.ssh/id_rsa')
+        .define('AWS.JumpboxCIDR', '0.0.0.0/0')
+        .define('AWS.VPCID', vpc)
+        .define('AWS.LinuxAMI', ami)
+        .define('HCPDomainName', config.domain_name)
         .save!
     end
 
