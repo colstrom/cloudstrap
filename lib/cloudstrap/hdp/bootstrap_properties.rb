@@ -31,6 +31,12 @@ module Cloudstrap
         self
       end
 
+      Contract RespondTo[:to_sym], String => BootstrapProperties
+      def define(property, value)
+        properties.store property.to_sym, value
+        self
+      end
+
       Contract None => Bool
       def save!
         JavaProperties.write(properties, file) ? true : false
