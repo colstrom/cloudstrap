@@ -391,6 +391,13 @@ module Cloudstrap
     def configure_hdp
       bootstrap_properties
         .define('Provider', 'AWS')
+        .update('KeepTerraform', 'true')
+        .update('NodeCount', '3')
+        .update('AWS.NodeInstanceType', 'm4.xlarge')
+        .update('AWS.MasterCount', '1')
+        .update('AWS.MasterInstanceType', 't2.medium')
+        .update('AWS.GlusterNodeCount', '2')
+        .update('AWS.GlusterFSInstanceType', 't2.medium')
         .define('AWS.Region', config.region)
         .define('AWS.AvailabilityZones', public_availability_zone)
         .define('AWS.PublicSubnetIDsAndAZ', [public_subnet, public_availability_zone].join(':'))
