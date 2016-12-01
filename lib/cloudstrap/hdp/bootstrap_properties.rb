@@ -64,7 +64,7 @@ module Cloudstrap
         if exist?
           JavaProperties.load file
         else
-          JavaProperties.parse seed.contents
+          JavaProperties.parse ''
         end
       end
 
