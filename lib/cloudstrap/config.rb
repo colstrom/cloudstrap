@@ -75,7 +75,10 @@ module Cloudstrap
 
     Contract None => String
     def hdp_bootstrap_version
-      lookup :hdp_bootstrap_version
+      lookup(:hdp_bootstrap_version) do
+        STDERR.puts pastel.yellow '# No version given, using default release'
+        '1.0.20-0-gda74de0'
+      end
     end
 
     alias hdp_version hdp_bootstrap_version
