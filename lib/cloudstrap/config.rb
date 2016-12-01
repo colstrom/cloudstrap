@@ -68,7 +68,7 @@ module Cloudstrap
 
     Contract None => String
     def hdp_bootstrap_origin
-      lookup :hdp_bootstrap_origin
+      lookup(:hdp_bootstrap_origin) { 'https://release.stackato.com/downloads/hcp/bootstrap' }
     end
 
     alias hdp_origin hdp_bootstrap_origin
