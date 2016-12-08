@@ -392,12 +392,12 @@ module Cloudstrap
       bootstrap_properties
         .define('Provider', 'AWS')
         .define('KeepTerraform', 'true')
-        .define('NodeCount', '3')
         .define('MasterCount', '1')
         .define('GlusterNodeCount', '2')
         .define('AWS.NodeInstanceType', 'm4.xlarge')
         .define('AWS.MasterInstanceType', 't2.medium')
         .define('AWS.GlusterFSInstanceType', 't2.medium')
+        .define('NodeCount', config.node_count)
         .define('AWS.Region', config.region)
         .define('AWS.AvailabilityZones', public_availability_zone)
         .define('AWS.PublicSubnetIDsAndAZ', [public_subnet, public_availability_zone].join(':'))
