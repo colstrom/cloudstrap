@@ -61,6 +61,11 @@ module Cloudstrap
       lookup(:master_instance_type) { 't2.medium' }
     end
 
+    Contract None => String
+    def gluster_instance_type
+      lookup(:gluster_instance_type) { 't2.medium' }
+    end
+
     Contract None => Or[Num, String]
     def node_count
       lookup(:node_count) { '3' }.to_s
