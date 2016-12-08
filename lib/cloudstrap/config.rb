@@ -56,6 +56,11 @@ module Cloudstrap
       lookup(:node_instance_type) { 'm4.xlarge' }
     end
 
+    Contract None => String
+    def master_instance_type
+      lookup(:master_instance_type) { 't2.medium' }
+    end
+
     Contract None => Or[Num, String]
     def node_count
       lookup(:node_count) { '3' }.to_s
