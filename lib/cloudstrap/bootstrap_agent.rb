@@ -392,9 +392,9 @@ module Cloudstrap
       bootstrap_properties
         .define('Provider', 'AWS')
         .define('KeepTerraform', 'true')
-        .define('AWS.GlusterFSInstanceType', 't2.medium')
         .define('AWS.NodeInstanceType', config.node_instance_type)
         .define('AWS.MasterInstanceType', config.master_instance_type)
+        .define('AWS.GlusterFSInstanceType', config.gluster_instance_type)
         .define('NodeCount', config.node_count)
         .define('MasterCount', config.master_count)
         .define('GlusterNodeCount', config.gluster_count)
