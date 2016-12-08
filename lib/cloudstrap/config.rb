@@ -61,6 +61,11 @@ module Cloudstrap
       lookup(:master_count) { '3' }.to_s
     end
 
+    Contract None => Or[Num, String]
+    def gluster_count
+      lookup(:gluster_count) { '2' }.to_s
+    end
+
     Contract None => String
     def ssh_dir
       lookup(:ssh_dir) { [workdir, '.ssh'].join('/') }
