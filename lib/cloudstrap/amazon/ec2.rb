@@ -208,10 +208,11 @@ module Cloudstrap
                  key_name: Optional[String],
                  client_token: Optional[String],
                  network_interfaces: Optional[ArrayOf[Hash]]
-               ] => ::Aws::EC2::Types::Instance
+               ] => ::Aws::EC2::Instance
       def create_instance(**properties)
-        call_api(:run_instances, properties.merge(min_count: 1, max_count: 1)).instances.first
-          .tap { instances! }
+        reservation = call_api(:run_instances, properties.merge(min_count: 1, max_count: 1))
+        instance = ::Aws::EC2::Instance.new reservation.instances.first.instance_id
+        instance.wait_until_running.tap { instances! }
       end
 
       Contract None => ArrayOf[::Aws::EC2::Types::Image]
