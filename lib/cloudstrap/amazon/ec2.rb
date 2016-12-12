@@ -427,6 +427,11 @@ module Cloudstrap
         @availability_zones ||= availability_zones!
       end
 
+      Contract None => ArrayOf[String]
+      def availability_zone_names
+        availability_zones.map(&:zone_name)
+      end
+
       private
 
       def client
