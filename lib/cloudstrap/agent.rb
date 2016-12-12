@@ -260,6 +260,20 @@ module Cloudstrap
       [public_subnet, private_subnet]
     end
 
+    Contract None => HashOf[String, String]
+    def private_subnets
+      network.private_layout(*ec2.availability_zone_names).map do |az, cidr|
+        properties = { vpc_id: vpc, cidr_block: cidr, availability_zone: az }
+        subnet = ec2.subnet(properties) || ec2.create_subnet(properties)
+        ec2.assign_name bootstrap_tag, subnet.subnet_id unless subnet
+                                                                 .tags
+                                                                 .any? do |tag|
+          tag.key == 'Name' && tag.value == bootstrap_tag
+        end
+        [az, subnet.subnet_id]
+      end.to_h
+    end
+
     Contract None => Bool
     def enable_public_ips
       ec2.map_public_ip_on_launch?(public_subnet) || ec2.map_public_ip_on_launch(public_subnet, true)
