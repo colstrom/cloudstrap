@@ -313,7 +313,8 @@ module Cloudstrap
 
       Contract KeywordArgs[
                  cidr_block: String,
-                 vpc_id: String
+                 vpc_id: String,
+                 availability_zone: Optional[String]
                ] => ::Aws::EC2::Types::Subnet
       def create_subnet(**properties)
         call_api(:create_subnet, properties).subnet
