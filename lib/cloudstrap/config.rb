@@ -202,7 +202,7 @@ EOS
     Contract None => Hash
     def config
       @settings ||= if File.exist?(path)
-                      YAML.load_file(path)
+                      YAML.load_file(path).map { |k, v| [k, v.to_s] }.to_h
                     else
                       {}
                     end
