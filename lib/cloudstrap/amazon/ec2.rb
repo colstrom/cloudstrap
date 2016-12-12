@@ -283,13 +283,15 @@ module Cloudstrap
       Contract KeywordArgs[
                  cidr_block: Optional[String],
                  vpc_id: Optional[String],
-                 subnet_id: Optional[String]
+                 subnet_id: Optional[String],
+                 availability_zone: Optional[String]
                ] => ArrayOf[::Aws::EC2::Types::Subnet]
-      def subnets(cidr_block: nil, vpc_id: nil, subnet_id: nil)
+      def subnets(cidr_block: nil, vpc_id: nil, subnet_id: nil, availability_zone: nil)
         subnets
           .select { |subnet| subnet_id.nil? || subnet.subnet_id == subnet_id }
           .select { |subnet| vpc_id.nil? || subnet.vpc_id == vpc_id }
           .select { |subnet| cidr_block.nil? || subnet.cidr_block == cidr_block }
+          .select { |subnet| availability_zone.nil? || subnet.availability_zone == availability_zone }
       end
 
       Contract Args[Any] => Any
