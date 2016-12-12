@@ -276,7 +276,9 @@ module Cloudstrap
 
     Contract None => Bool
     def enable_public_ips
-      ec2.map_public_ip_on_launch?(public_subnet) || ec2.map_public_ip_on_launch(public_subnet, true)
+      public_subnets.all? do |_, subnet|
+        ec2.map_public_ip_on_launch?(subnet) || ec2.map_public_ip_on_launch(subnet, true)
+      end
     end
 
     Contract None => String
