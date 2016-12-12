@@ -6,6 +6,7 @@ require_relative 'amazon'
 require_relative 'config'
 require_relative 'errors'
 require_relative 'hdp/bootstrap_properties'
+require_relative 'network'
 require_relative 'ssh'
 
 module Cloudstrap
@@ -148,6 +149,11 @@ module Cloudstrap
     Contract None => String
     def jumpbox_security_group
       find_jumpbox_security_group || create_jumpbox_security_group
+    end
+
+    Contract None => Network
+    def network
+      @network ||= Network.new config.vpc_cidr_block
     end
 
     Contract None => String
