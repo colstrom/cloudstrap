@@ -69,7 +69,7 @@ BOOTSTRAP_WITHOUT_HUMAN_OVERSIGHT=#{!agent.requires_human_oversight?}
 # Public IPs Enabled in Public Subnet? #{agent.enable_public_ips}
 # Gateway Attached to VPC? #{agent.attach_gateway}
 # Route to Internet via Gateway? #{agent.default_route}
-# Route to NAT Gateway from Private Subnet? #{agent.nat_route}
+# Route to NAT Gateway from Private Subnets? #{agent.configure_nat_routes}
 # SSH Allowed to Jumpbox? #{agent.allow_ssh}
 # SSH Key uploaded to AWS? #{agent.upload_ssh_key}
 # HDP bootstrap.properties configured? #{agent.configure_hdp}
