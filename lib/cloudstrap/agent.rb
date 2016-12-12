@@ -373,15 +373,7 @@ module Cloudstrap
 
     Contract None => String
     def public_availability_zone
-      @public_availability_zone ||= ENV.fetch('BOOTSTRAP_PUBLIC_AVAILABILITY_ZONE') do
-        cache.fetch(:public_availability_zone) do
-          cache.store(:public_availability_zone, ec2
-                                          .subnets
-                                          .select { |subnet| subnet.subnet_id == public_subnet }
-                                          .map { |subnet| subnet.availability_zone }
-                                          .first)
-        end
-      end
+      public_subnets.keys.first
     end
 
     Contract None => String
