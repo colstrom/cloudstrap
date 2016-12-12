@@ -241,6 +241,20 @@ module Cloudstrap
       end
     end
 
+    Contract None => HashOf[String, String]
+    def public_subnets
+      network.public_layout(*ec2.availability_zone_names).map do |az, cidr|
+        properties = { vpc_id: vpc, cidr_block: cidr, availability_zone: az }
+        subnet = ec2.subnet(properties) || ec2.create_subnet(properties)
+        ec2.assign_name bootstrap_tag, subnet.subnet_id unless subnet
+                                                                 .tags
+                                                                 .any? do |tag|
+          tag.key == 'Name' && tag.value == bootstrap_tag
+        end
+        [az, subnet.subnet_id]
+      end.to_h
+    end
+
     Contract None => ArrayOf[String]
     def subnets
       [public_subnet, private_subnet]
