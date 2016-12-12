@@ -14,7 +14,7 @@ gem = Gem::Specification
       .last
 
 config = Cloudstrap::Config.new
-agent = Cloudstrap::BootstrapAgent.new
+agent = Cloudstrap::Agent.new
 
 puts <<-EOS
 # #{gem.name} v#{gem.version}

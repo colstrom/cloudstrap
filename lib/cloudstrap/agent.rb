@@ -9,18 +9,18 @@ require_relative 'hdp/bootstrap_properties'
 require_relative 'ssh'
 
 module Cloudstrap
-  class BootstrapAgent
+  class Agent
     include ::Contracts::Core
     include ::Contracts::Builtin
 
-    Contract None => BootstrapAgent
+    Contract None => Agent
     def initialize
       validate_configuration!
       self
     end
 
     Contract None => Any
-    def validate_configuration!  # TODO: Does this really belong in BootstrapAgent?
+    def validate_configuration!  # TODO: Does this really belong in Agent?
       return if ec2.valid_region?(config.region)
       raise ::Cloudstrap::ConfigurationError, "Region #{config.region} is not valid"
     end
