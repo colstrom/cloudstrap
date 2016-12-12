@@ -163,16 +163,7 @@ module Cloudstrap
 
     Contract None => String
     def public_subnet
-      @public_subnet ||= ENV.fetch('BOOTSTRAP_PUBLIC_SUBNET_ID') do
-        cache.fetch(:public_subnet_id) do
-          properties = { vpc_id: vpc, cidr_block: config.public_cidr_block }
-          cache.store(:public_subnet_id, (ec2.subnet(properties) || ec2.create_subnet(properties)).tap do |subnet|
-                        ec2.assign_name bootstrap_tag, subnet.subnet_id unless subnet.tags.any? do |tag|
-                          tag.key == 'Name' && tag.value = bootstrap_tag
-                        end
-                      end.subnet_id)
-        end
-      end
+      public_subnets.values.first
     end
 
     Contract None => String
