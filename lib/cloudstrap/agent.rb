@@ -378,15 +378,7 @@ module Cloudstrap
 
     Contract None => String
     def private_availability_zone
-      @private_availability_zone ||= ENV.fetch('BOOTSTRAP_PRIVATE_AVAILABILITY_ZONE') do
-        cache.fetch(:private_availability_zone) do
-          cache.store(:private_availability_zone, ec2
-                                          .subnets
-                                          .select { |subnet| subnet.subnet_id == private_subnet }
-                                          .map { |subnet| subnet.availability_zone }
-                                          .first)
-        end
-      end
+      private_subnets.keys.first
     end
 
     Contract None => String
