@@ -416,6 +416,17 @@ module Cloudstrap
         region_names.include? region_name
       end
 
+      Contract None => ArrayOf[Aws::EC2::Types::AvailabilityZone]
+      def availability_zones!
+        @availability_zones = call_api(:describe_availability_zones)
+                                .availability_zones
+      end
+
+      Contract None => ArrayOf[Aws::EC2::Types::AvailabilityZone]
+      def availability_zones
+        @availability_zones ||= availability_zones!
+      end
+
       private
 
       def client
