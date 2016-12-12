@@ -281,6 +281,13 @@ module Cloudstrap
       end
     end
 
+    Contract None => Bool
+    def configure_nat_routes
+      private_subnets.all? do |_, subnet|
+        ec2.associate_route_table private_route_table, subnet
+      end
+    end
+
     Contract None => String
     def vpc
       find_vpc || create_vpc
