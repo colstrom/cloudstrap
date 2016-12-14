@@ -274,9 +274,11 @@ module Cloudstrap
         key_fingerprint(key_name)
       end
 
-      Contract None => ::Aws::EC2::Types::Vpc
+      Contract None => ::Aws::EC2::Vpc
       def create_vpc
-        call_api(:create_vpc, cidr_block: config.vpc_cidr_block).vpc
+        response = call_api(:create_vpc, cidr_block: config.vpc_cidr_block).vpc
+        ::Aws::EC2::Vpc.new(response.vpc_id)
+          .wait_until_available
           .tap { vpcs! }
       end
 
