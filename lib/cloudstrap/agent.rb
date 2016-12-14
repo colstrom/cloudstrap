@@ -408,7 +408,7 @@ module Cloudstrap
         .define('MasterCount', config.master_count)
         .define('GlusterNodeCount', config.gluster_count)
         .define('AWS.Region', config.region)
-        .define('AWS.AvailabilityZones', public_availability_zone)
+        .define('AWS.AvailabilityZones', ec2.availability_zone_names.join(','))
         .define('AWS.PublicSubnetIDsAndAZ', public_subnets.invert.map { |*s| s.join(':') }.join(','))
         .define('AWS.PrivateSubnetIDsAndAZ', private_subnets.invert.map { |*s| s.join(':') }.join(','))
         .define('AWS.Keypair', bootstrap_tag)
