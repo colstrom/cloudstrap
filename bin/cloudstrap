@@ -13,6 +13,13 @@ gem = Gem::Specification
       .sort_by { |spec| spec.version }
       .last
 
+version = Regexp.union(/^-[vV]$/, /--?version/)
+
+if ARGV.any? { |arg| arg =~ version }
+  puts "#{gem.name} v#{gem.version}"
+  exit
+end
+
 config = Cloudstrap::Config.new
 agent = Cloudstrap::Agent.new
 
