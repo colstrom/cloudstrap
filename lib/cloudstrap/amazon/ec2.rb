@@ -315,9 +315,12 @@ module Cloudstrap
                  cidr_block: String,
                  vpc_id: String,
                  availability_zone: Optional[String]
-               ] => ::Aws::EC2::Types::Subnet
+               ] => ::Aws::EC2::Subnet
       def create_subnet(**properties)
-        call_api(:create_subnet, properties).subnet
+        response = call_api(:create_subnet, properties).subnet
+        Aws::EC2::Subnet
+          .new(response.subnet_id)
+          .wait_until { |subnet| subnet.state == 'available' }
           .tap { subnets! }
       rescue ::Aws::EC2::Errors::InvalidSubnetConflict
         subnet(properties) || subnet!(properties)
