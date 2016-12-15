@@ -1,0 +1,274 @@
+#!/usr/bin/env ruby
+
+abort 'usage: cloudstrap-teardown <vpc>' if ARGV.empty?
+
+require 'aws-sdk'
+require 'concurrent'
+require 'tty/spinner'
+
+ARBITRARY_DELAY_TO_PLEASE_THE_EYES = (0.8..1.2)
+
+spinner = ->(s) { TTY::Spinner.new "[:spinner] #{s} ...", format: :arrow_pulse }
+
+show = lambda do |text, &block|
+  Concurrent::IVar.new.tap do |ivar|
+    spinner.(text).run('done!') do
+      ivar.set block.call
+    end
+  end.value
+end
+
+def wait_a_bit
+  sleep rand ARBITRARY_DELAY_TO_PLEASE_THE_EYES
+end
+
+def user_wants_to_go_fast?
+  true unless %w(false nil).include? ENV.fetch('CLOUDSTRAP_GO_ZOOM') { 'false' }
+end
+
+##
+# AWS Resources are lazy by nature.
+##
+
+eager = lambda do |method, object|
+  if object.respond_to? :flat_map
+    object.flat_map(&eager.(method))
+  else
+    object.public_send(method).map(&:itself)
+  end
+end.curry
+
+##
+# Explore VPC
+##
+
+task = {}
+
+task[:vpcs] = Concurrent.dataflow do
+  show.('Discovering VPCs') do
+    Aws::EC2::Resource.new.vpcs.select { |vpc| ARGV.include? vpc.id }
+  end
+end
+
+wait_a_bit unless user_wants_to_go_fast?
+
+task[:internet_gateways] = Concurrent.dataflow(task[:vpcs]) do |vpcs|
+  show.("Discovering Internet Gateways in #{vpcs.size} VPCs") do
+    eager.(:internet_gateways).(vpcs)
+  end
+end
+
+wait_a_bit unless user_wants_to_go_fast?
+
+task[:instances] = Concurrent.dataflow(task[:vpcs]) do |vpcs|
+  show.("Discovering Instances in #{vpcs.size} VPCs") do
+    eager.(:instances).(vpcs)
+  end
+end
+
+wait_a_bit unless user_wants_to_go_fast?
+
+task[:subnets] = Concurrent.dataflow(task[:vpcs]) do |vpcs|
+  show.("Discovering Subnets in #{vpcs.size} VPCs") do
+    eager.(:subnets).(vpcs)
+  end
+end
+
+wait_a_bit unless user_wants_to_go_fast?
+
+task[:security_groups] = Concurrent.dataflow(task[:vpcs]) do |vpcs|
+  show.("Discovering Security Groups in #{vpcs.size} VPCs") do
+    eager.(:security_groups).(vpcs)
+  end
+end
+
+wait_a_bit unless user_wants_to_go_fast?
+
+task[:route_tables] = Concurrent.dataflow(task[:vpcs]) do |vpcs|
+  show.("Discovering Route Tables in #{vpcs.size} VPCs") do
+    eager.(:instances).(vpcs)
+  end
+end
+
+wait_a_bit unless user_wants_to_go_fast?
+
+task[:routes] = Concurrent.dataflow(task[:route_tables]) do |route_tables|
+  show.("Discovering Routes in #{route_tables.size} Route Tables") do
+    eager.(:routes).(route_tables)
+  end
+end
+
+wait_a_bit unless user_wants_to_go_fast?
+
+task[:sg_ingress_rules] = Concurrent.dataflow(task[:security_groups]) do |security_groups|
+  show.("Discovering Ingress Rules in #{security_groups.size} Security Groups") do
+    security_groups.map do |security_group|
+      ingress_rules = security_group.ip_permissions.map(&:to_h).map do |rule|
+        rule.reject { |_, v| v.nil? || (v.respond_to?(:empty?) && v.empty?) }
+      end
+      [security_group, ingress_rules]
+    end.to_h
+  end
+end
+
+wait_a_bit unless user_wants_to_go_fast?
+
+task[:sg_egress_rules] = Concurrent.dataflow(task[:security_groups]) do |security_groups|
+  show.("Discovering Egress Rules in #{security_groups.size} Security Groups") do
+    security_groups.map do |security_group|
+      egress_rules = security_group.ip_permissions_egress.map(&:to_h).map do |rule|
+        rule.reject { |_, v| v.nil? || (v.respond_to?(:empty?) && v.empty?) }
+      end
+      [security_group, egress_rules]
+    end.to_h
+  end
+end
+
+wait_a_bit unless user_wants_to_go_fast?
+
+task[:nat_gateways] = Concurrent.dataflow(task[:vpcs]) do |vpcs|
+  show.("Discovering NAT Gateways in #{vpcs.size} VPCs") do
+    query = Aws::EC2::Client.new.describe_nat_gateways
+    (query.successful? ? query.nat_gateways : [])
+      .select { |ngw| vpcs.any? { |vpc| ngw.vpc_id == vpc.id } }
+  end
+end
+
+wait_a_bit unless user_wants_to_go_fast?
+
+task[:classic_elbs] = Concurrent.dataflow(task[:vpcs]) do |vpcs|
+  show.("Discovering Classic Load Balancers in #{vpcs.size} VPCs") do
+    query = Aws::ElasticLoadBalancing::Client.new.describe_load_balancers
+    (query.successful? ? query.load_balancer_descriptions : [])
+      .select { |elb| vpcs.any? { |vpc| elb.vpc_id == vpc.id } }
+  end
+end
+
+wait_a_bit unless user_wants_to_go_fast?
+
+task[:application_elbs] = Concurrent.dataflow(task[:vpcs]) do |vpcs|
+  show.("Discovering Application Load Balancers in #{vpcs.size} VPCs") do
+    query = Aws::ElasticLoadBalancingV2::Client.new.describe_load_balancers
+    (query.successful? ? query.load_balancers : [])
+      .select { |elb| vpcs.any? { |vpc| elb.vpc_id == vpc.id } }
+  end
+end
+
+##
+# Burn it to the ground
+##
+
+wait_a_bit unless user_wants_to_go_fast?
+
+task[:instances_relocated] = Concurrent.dataflow(task[:instances], task[:security_groups]) do |instances, security_groups|
+  show.("Relocating #{instances.size} Instances to #{security_groups.size} Default Security Groups") do
+    instances.map do |instance|
+      default = security_groups
+                  .select { |sg| sg.vpc_id == instance.vpc_id }
+                  .find { |sg| sg.group_name == 'default' }
+      instance.modify_attribute groups: [default.id]
+    end
+  end
+end
+
+wait_a_bit unless user_wants_to_go_fast?
+
+task[:nat_gateways_deleted] = Concurrent.dataflow(task[:nat_gateways]) do |gateways|
+  show.("Deleting #{gateways.size} NAT Gateways") do
+    gateways.map do |ngw|
+      Aws::EC2::Client.new.delete_nat_gateway nat_gateway_id: ngw.nat_gateway_id
+    end
+  end
+end
+
+wait_a_bit unless user_wants_to_go_fast?
+
+task[:instances_terminated] = Concurrent.dataflow(task[:instances], task[:instances_relocated]) do |instances|
+  show.("Terminating #{instances.size} Instances") do
+    instances.each(&:terminate).map(&:wait_until_terminated)
+  end
+end
+
+wait_a_bit unless user_wants_to_go_fast?
+
+task[:igw_detached] = Concurrent.dataflow(task[:internet_gateways], task[:instances_terminated], task[:nat_gateways_deleted]) do |gateways|
+  show.("Detaching #{gateways.size} Internet Gateways") do
+    gateways.map do |igw|
+      igw.attachments.map(&:vpc_id).map do |vpc|
+        igw.detach_from_vpc vpc_id: vpc
+      end
+    end
+  end
+end
+
+wait_a_bit unless user_wants_to_go_fast?
+
+task[:igw_deleted] = Concurrent.dataflow(task[:internet_gateways], task[:igw_detached]) do |gateways|
+  show.("Deleting #{gateways.size} Internet Gateways") do
+    gateways.map(&:delete)
+  end
+end
+
+wait_a_bit unless user_wants_to_go_fast?
+
+task[:sg_ingress_revoked] = Concurrent.dataflow(task[:sg_ingress_rules]) do |ingress|
+  count = ingress.values.map(&:size).reduce(:+)
+  show.("Revoking #{count} Ingress Rules for Security Groups") do
+    ingress.map do |sg, rules|
+      sg.revoke_ingress ip_permissions: rules unless rules.empty?
+    end
+  end
+end
+
+wait_a_bit unless user_wants_to_go_fast?
+
+task[:sg_egress_revoked] = Concurrent.dataflow(task[:sg_egress_rules]) do |egress|
+  count = egress.values.map(&:size).reduce(:+)
+  show.("Revoking #{count} Egress Rules for Security Groups") do
+    egress.map do |sg, rules|
+      sg.revoke_egress ip_permissions: rules unless rules.empty?
+    end
+  end
+end
+
+wait_a_bit unless user_wants_to_go_fast?
+
+task[:security_groups_deleted] = Concurrent.dataflow(task[:security_groups], task[:sg_ingress_revoked], task[:sg_egress_revoked]) do |all_security_groups|
+  security_groups = all_security_groups.reject { |sg| sg.group_name == 'default' }
+  show.("Deleting #{security_groups.size} Security Groups") do
+    security_groups.map(&:delete)
+  end
+end
+
+wait_a_bit unless user_wants_to_go_fast?
+
+task[:subnets_deleted] = Concurrent.dataflow(task[:subnets]) do |subnets|
+  show.("Deleting #{subnets.size} Subnets") do
+    subnets.map(&:delete)
+  end
+end
+
+wait_a_bit unless user_wants_to_go_fast?
+
+task[:routes_deleted] = Concurrent.dataflow(task[:routes]) do |all_routes|
+  routes = all_routes.reject { |route| route.gateway_id == 'local' }
+  show.("Deleting #{routes.size} Routes") do
+    routes.each(&:delete)
+  end
+end
+
+wait_a_bit unless user_wants_to_go_fast?
+
+vpcs_deleted = Concurrent.dataflow(task[:vpcs], *task.values) do |vpcs|
+  show.("Deleting #{vpcs.size} VPCs") do
+    vpcs.map do |vpc|
+      begin
+        vpc.delete
+      rescue Aws::EC2::Errors::DependencyViolation => e
+        e
+      end
+    end
+  end
+end
+
+puts vpcs_deleted.value
