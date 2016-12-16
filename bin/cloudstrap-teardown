@@ -253,7 +253,7 @@ wait_a_bit unless user_wants_to_go_fast?
 task[:routes_deleted] = Concurrent.dataflow(task[:routes]) do |all_routes|
   routes = all_routes.reject { |route| route.gateway_id == 'local' }
   show.("Deleting #{routes.size} Routes") do
-    routes.each(&:delete)
+    routes.map(&:delete)
   end
 end
 
