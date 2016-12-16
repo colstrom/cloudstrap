@@ -5,7 +5,7 @@ require_relative '../config'
 require_relative '../seed_properties'
 
 module Cloudstrap
-  module HDP
+  module HCP
     class BootstrapProperties
       include ::Contracts::Core
       include ::Contracts::Builtin
@@ -44,7 +44,7 @@ module Cloudstrap
 
       Contract None => String
       def file
-        @file ||= [config.hdp_dir, 'bootstrap.properties'].join('/')
+        @file ||= [config.hcp_dir, 'bootstrap.properties'].join('/')
       end
 
       private

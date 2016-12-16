@@ -44,7 +44,7 @@ The output describes the results, and all settings used in the process.
   BOOTSTRAP_INSTANCE_TYPE=t2.micro
   BOOTSTRAP_SSH_DIR=/Users/colstrom/cloudstrap/.ssh
   BOOTSTRAP_SSH_USERNAME=ubuntu
-  BOOTSTRAP_HDP_DIR=/Users/colstrom/cloudstrap
+  BOOTSTRAP_HCP_DIR=/Users/colstrom/cloudstrap
 
   # Cached Configuration
   #   These settings can be overridden via ENV only
@@ -73,10 +73,10 @@ The output describes the results, and all settings used in the process.
   # Route to NAT Gateway from Private Subnet? true
   # SSH Allowed to Jumpbox? true
   # SSH Key uploaded to AWS? 1a:c4:ec:25:94:90:ed:ee:c2:66:2e:3c:9c:c8:7a:12
-  # HDP bootstrap.properties configured? true
+  # HCP bootstrap.properties configured? true
   # Jumpbox Running? true
 
-  # No version specified for HDP Bootstrap, falling back to default version
+  # No version specified for HCP Bootstrap, falling back to default version
   INFO [0942f874] Running /usr/bin/env rm -f /home/ubuntu/.ssh/id_rsa as ubuntu@52.89.237.123
   INFO [0942f874] Finished in 11.547 seconds with exit status 0 (successful).
   INFO Uploading /Users/colstrom/cloudstrap/.ssh/lkg@colstrom/97cb1464-cf44-479e-be47-9a212131ad4c 100.0%

@@ -92,32 +92,32 @@ module Cloudstrap
     end
 
     Contract None => String
-    def hdp_dir
-      @hdp_dir ||= File.expand_path(ENV.fetch('BOOTSTRAP_HDP_DIR') { dir })
+    def hcp_dir
+      @hcp_dir ||= File.expand_path(ENV.fetch('BOOTSTRAP_HCP_DIR') { dir })
     end
 
     Contract None => String
-    def hdp_bootstrap_origin
-      lookup(:hdp_bootstrap_origin) { 'https://release.stackato.com/downloads/hcp/bootstrap' }
+    def hcp_bootstrap_origin
+      lookup(:hcp_bootstrap_origin) { 'https://release.stackato.com/downloads/hcp/bootstrap' }
     end
 
-    alias hdp_origin hdp_bootstrap_origin
+    alias hcp_origin hcp_bootstrap_origin
 
     Contract None => String
-    def hdp_bootstrap_version
-      lookup(:hdp_bootstrap_version) { '1.0.20-0-gda74de0' }
+    def hcp_bootstrap_version
+      lookup(:hcp_bootstrap_version) { '1.0.20-0-gda74de0' }
     end
 
-    alias hdp_version hdp_bootstrap_version
+    alias hcp_version hcp_bootstrap_version
 
     Contract None => String
-    def hdp_bootstrap_package_url
-      lookup(:hdp_bootstrap_package_url) do
-        "#{hdp_origin}/hcp-bootstrap_#{hdp_version.gsub('+', '%2B')}_amd64.deb"
+    def hcp_bootstrap_package_url
+      lookup(:hcp_bootstrap_package_url) do
+        "#{hcp_origin}/hcp-bootstrap_#{hcp_version.gsub('+', '%2B')}_amd64.deb"
       end
     end
 
-    alias hdp_package_url hdp_bootstrap_package_url
+    alias hcp_package_url hcp_bootstrap_package_url
 
     Contract None => String
     def properties_seed_url

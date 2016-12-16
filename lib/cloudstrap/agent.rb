@@ -5,7 +5,7 @@ require 'securerandom'
 require_relative 'amazon'
 require_relative 'config'
 require_relative 'errors'
-require_relative 'hdp/bootstrap_properties'
+require_relative 'hcp/bootstrap_properties'
 require_relative 'network'
 require_relative 'ssh'
 
@@ -397,7 +397,7 @@ module Cloudstrap
     end
 
     Contract None => Bool
-    def configure_hdp
+    def configure_hcp
       bootstrap_properties
         .define('Provider', 'AWS')
         .define('KeepTerraform', 'true')
@@ -433,7 +433,7 @@ module Cloudstrap
     def configure_jumpbox
       private_key = ssh_key.private_file
       properties = bootstrap_properties.file
-      package = config.hdp_package_url
+      package = config.hcp_package_url
 
       ssh.to(jumpbox_ip) do
         '/home/ubuntu/.ssh/id_rsa'.tap do |target|
@@ -479,9 +479,9 @@ module Cloudstrap
       @ssh ||= SSH::Client.new(ssh_key.private_file)
     end
 
-    Contract None => HDP::BootstrapProperties
+    Contract None => HCP::BootstrapProperties
     def bootstrap_properties
-      @hdp ||= HDP::BootstrapProperties.new
+      @hcp ||= HCP::BootstrapProperties.new
     end
 
     Contract None => Amazon::EC2
