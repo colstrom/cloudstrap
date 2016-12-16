@@ -259,6 +259,15 @@ end
 
 wait_a_bit unless user_wants_to_go_fast?
 
+task[:route_tables_deleted] = Concurrent.dataflow(task[:route_tables], task[:routes_deleted]) do |all_route_tables|
+  route_tables = all_route_tables.reject { |rtb| rtb.associations.any?(&:main) }
+  show.("Deleting #{route_tables.size} Route Tables") do
+    route_tables.map(&:delete)
+  end
+end
+
+wait_a_bit unless user_wants_to_go_fast?
+
 vpcs_deleted = Concurrent.dataflow(task[:vpcs], *task.values) do |vpcs|
   show.("Deleting #{vpcs.size} VPCs") do
     vpcs.map do |vpc|
