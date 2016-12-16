@@ -271,4 +271,4 @@ vpcs_deleted = Concurrent.dataflow(task[:vpcs], *task.values) do |vpcs|
   end
 end
 
-puts vpcs_deleted.value
+puts vpcs_deleted.value.reject { |o| o.is_a? Struct }
