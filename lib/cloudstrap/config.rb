@@ -105,7 +105,7 @@ module Cloudstrap
 
     Contract None => String
     def hcp_bootstrap_version
-      lookup(:hcp_bootstrap_version) { '1.0.20-0-gda74de0' }
+      lookup(:hcp_bootstrap_version) { '1.0.21-0-g77ce3d1' }
     end
 
     alias hcp_version hcp_bootstrap_version
