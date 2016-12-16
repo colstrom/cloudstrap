@@ -86,7 +86,7 @@ wait_a_bit unless user_wants_to_go_fast?
 
 task[:route_tables] = Concurrent.dataflow(task[:vpcs]) do |vpcs|
   show.("Discovering Route Tables in #{vpcs.size} VPCs") do
-    eager.(:instances).(vpcs)
+    eager.(:route_tables).(vpcs)
   end
 end
 
