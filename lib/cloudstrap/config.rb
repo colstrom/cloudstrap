@@ -108,6 +108,7 @@ module Cloudstrap
       end
     end
 
+    Contract None => String
     def hcp_dir
       @hcp_dir ||= File.expand_path(ENV.fetch('BOOTSTRAP_HCP_DIR') { dir })
     end
