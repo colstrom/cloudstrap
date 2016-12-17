@@ -21,6 +21,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'java-properties', '~> 0.1', '>= 0.1.1'
   gem.add_runtime_dependency 'pastel', '~> 0.6', '>= 0.6.0'
   gem.add_runtime_dependency 'tty-spinner', '~> 0.4', '>= 0.4.1'
+  gem.add_runtime_dependency 'concurrent-ruby', '~> 1.0', '>= 1.0.2'
   gem.add_runtime_dependency 'faraday', '~> 0.9', '>= 0.9.0'
   gem.add_runtime_dependency 'burdened-acrobat', '~> 0.3', '>= 0.3.4'
   gem.add_runtime_dependency 'path53', '~> 0.4', '>= 0.4.8'
