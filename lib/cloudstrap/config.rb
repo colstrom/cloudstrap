@@ -97,6 +97,17 @@ module Cloudstrap
     end
 
     Contract None => String
+    def artifact_origin
+      lookup(:artifact_origin) do
+        case channel
+        when 'release'
+          'release.stackato.com'
+        when 'dev'
+          'dev.stackato.com'
+        end
+      end
+    end
+
     def hcp_dir
       @hcp_dir ||= File.expand_path(ENV.fetch('BOOTSTRAP_HCP_DIR') { dir })
     end
