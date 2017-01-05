@@ -91,6 +91,11 @@ module Cloudstrap
       lookup(:ssh_username) { 'ubuntu' }
     end
 
+    Contract None => Enum['dev', 'release']
+    def channel
+      lookup(:channel) { 'release' }
+    end
+
     Contract None => String
     def hcp_dir
       @hcp_dir ||= File.expand_path(ENV.fetch('BOOTSTRAP_HCP_DIR') { dir })
