@@ -121,6 +121,13 @@ module Cloudstrap
     end
 
     Contract None => String
+    def hce_metadata
+      lookup(:hce_metadata) do
+        "#{hce_prefix}/dist/v2/linux-amd64.json"
+      end.squeeze('/')
+    end
+
+    Contract None => String
     def hsm_prefix
       lookup(:hsm_prefix) do
         "#{artifact_prefix}/hsm"
