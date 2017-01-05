@@ -109,6 +109,11 @@ module Cloudstrap
     end
 
     Contract None => String
+    def artifact_prefix
+      lookup(:artifact_prefix) { '/downloads' }
+    end
+
+    Contract None => String
     def hcp_dir
       @hcp_dir ||= File.expand_path(ENV.fetch('BOOTSTRAP_HCP_DIR') { dir })
     end
