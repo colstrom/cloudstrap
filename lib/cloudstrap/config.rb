@@ -142,7 +142,13 @@ module Cloudstrap
     Contract None => String
     def hcp_bootstrap_package_url
       lookup(:hcp_bootstrap_package_url) do
-        "#{hcp_origin}/hcp-bootstrap_#{hcp_version.gsub('+', '%2B')}_amd64.deb"
+        version = hcp_bootstrap_version.gsub('+', '%2B')
+        'https://' + [
+          artifact_origin,
+          hcp_prefix,
+          'bootstrap',
+          "hcp-bootstrap_#{version}_amd64.deb"
+        ].join('/').squeeze('/')
       end
     end
 
