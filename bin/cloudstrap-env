@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+
+require 'pastel'
+
+if ENV['HACKING']
+  require_relative '../lib/cloudstrap'
+else
+  require 'cloudstrap'
+end
+
+config = Cloudstrap::Config.new
+configurables = config
+                  .public_methods(false)
+                  .reject { |m| m.to_s.start_with? '__contracts_ruby_original' }
+                  .reject { |m| %i(Contract functype).include? m }
+settings = configurables
+             .map { |key| [key, config.send(key)] }
+             .to_h
+
+settings.sort.each do |key, value|
+  puts "BOOTSTRAP_#{key.upcase}=#{value}"
+end
