@@ -2,6 +2,8 @@ require 'contracts'
 require 'pastel'
 require 'yaml'
 
+require_relative 'component_versions'
+
 module Cloudstrap
   class Config
     include ::Contracts::Core
@@ -260,6 +262,11 @@ EOS
     Contract None => String
     def path
       @path ||= File.expand_path [dir, file].join('/')
+    end
+
+    Contract None => ComponentVersions
+    def latest
+      @latest ||= ComponentVersions.new self
     end
 
     Contract None => Hash
