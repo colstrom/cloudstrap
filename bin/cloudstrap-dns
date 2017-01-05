@@ -22,7 +22,7 @@ puts <<-EOS
 EOS
 
 config = Cloudstrap::Config.new
-route53 = Cloudstrap::Amazon::Route53.new region: config.region
+route53 = Cloudstrap::Amazon::Route53.new config
 
 abort "Cache not found! #{$PROGRAM_NAME} should be run *after* cloudstrap." unless Dir.exist? config.cache_path
 
