@@ -163,6 +163,13 @@ module Cloudstrap
     end
 
     Contract None => String
+    def hcp_metadata
+      lookup(:hcp_metadata) do
+        "#{hcp_prefix}/cli/update/#{hcp_channel}/linux-amd64.json"
+      end.squeeze('/')
+    end
+
+    Contract None => String
     def hcp_dir
       @hcp_dir ||= File.expand_path(ENV.fetch('BOOTSTRAP_HCP_DIR') { dir })
     end
