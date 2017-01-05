@@ -121,6 +121,13 @@ module Cloudstrap
     end
 
     Contract None => String
+    def hsm_prefix
+      lookup(:hsm_prefix) do
+        "#{artifact_prefix}/hsm"
+      end.squeeze('/')
+    end
+
+    Contract None => String
     def hcp_prefix
       lookup(:hcp_prefix) do
         "#{artifact_prefix}/hcp"
