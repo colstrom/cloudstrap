@@ -151,6 +151,18 @@ module Cloudstrap
     end
 
     Contract None => String
+    def hcp_channel
+      lookup(:hcp_channel) do
+        case channel
+        when 'dev'
+          'hcp_0.9_development'
+        when 'release'
+          'hcp_1.0_stable'
+        end
+      end
+    end
+
+    Contract None => String
     def hcp_dir
       @hcp_dir ||= File.expand_path(ENV.fetch('BOOTSTRAP_HCP_DIR') { dir })
     end
