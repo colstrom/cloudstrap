@@ -1,0 +1,30 @@
+#!/usr/bin/env ruby
+
+require 'json'
+require 'yaml'
+
+if ENV['HACKING']
+  require_relative '../lib/cloudstrap'
+else
+  require 'cloudstrap'
+end
+
+config = Cloudstrap::Config.new
+configurables = config
+                  .public_methods(false)
+                  .reject { |m| m.to_s.start_with? '__contracts_ruby_original' }
+                  .reject { |m| %i(Contract functype).include? m }
+
+settings = configurables
+             .map { |key| [key.to_s, config.send(key)] }
+             .sort_by(&:first)
+             .to_h
+
+case ARGV.first
+when nil, /^--?y(a?ml)?$/i
+  puts YAML.dump settings
+when /^--?j(son)?$/i
+  puts JSON.pretty_generate settings
+else
+  STDERR.puts "Usage: #{File.basename $PROGRAM_NAME} (--yaml|--json)"
+end
