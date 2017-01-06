@@ -1,0 +1,51 @@
+#!/usr/bin/env ruby
+
+require 'faraday'
+require 'tty-table'
+require 'pastel'
+
+if ENV['HACKING']
+  require_relative '../lib/cloudstrap'
+else
+  require 'cloudstrap'
+end
+
+CLOUDSTRAP_VERSION = $LOADED_FEATURES
+                       .map { |f| f.match %r{cloudstrap-(?<version>[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+(\.pre)?)} }
+                       .compact
+                       .map { |m| m['version'] }
+                       .uniq
+                       .first
+
+gem = ->(name) { MultiJson.load Faraday.new(Gem.host).get("/api/v1/gems/#{name}.json").body }
+latest_cloudstrap = gem.(:cloudstrap)['version']
+
+config = Cloudstrap::Config.new
+
+green = Pastel.new.green.detach
+red = Pastel.new.red.detach
+
+cloudstrap = (CLOUDSTRAP_VERSION.end_with?('pre') ? red : green).call CLOUDSTRAP_VERSION
+latest = ->(component) { config.send(:latest).send(component) }
+using  = ->(component) { config.send("#{component}_version") }
+
+version = ->(component) { (using.(component) == latest.(component) ? green : red).call using.(component) }
+
+table = TTY::Table.new %w(component using latest), [
+                         ['cloudstrap', cloudstrap, green.(latest_cloudstrap)],
+                         [:hce, version.(:hce), green.(latest.(:hce))],
+                         [:hcp, version.(:hcp), green.(latest.(:hcp))],
+                         [:hsm, version.(:hsm), green.(latest.(:hsm))]
+                       ]
+
+case ARGV.first
+when nil, /^--?(p(retty)?|u(nicode)?)$/i
+  puts table.render(:unicode)
+when /^--?a(scii)?$/i
+  puts table.render(:ascii)
+when /^--?b(asic)?$/i
+  puts Pastel.new.strip table.render(:basic)
+else
+  STDERR.puts "usage: #{File.basename $PROGRAM_NAME} (--pretty | --unicode | --ascii | --basic)"
+  abort
+end
