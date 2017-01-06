@@ -149,6 +149,11 @@ module Cloudstrap
     end
 
     Contract None => String
+    def hsm_version
+      lookup(:hsm_version) { latest.hsm }
+    end
+
+    Contract None => String
     def hcp_prefix
       lookup(:hcp_prefix) do
         "#{artifact_prefix}/hcp"
