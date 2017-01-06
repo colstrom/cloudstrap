@@ -4,7 +4,7 @@ abort 'usage: cloudstrap-teardown <vpc>' if ARGV.empty?
 
 require 'aws-sdk'
 require 'concurrent'
-require 'tty/spinner'
+require 'tty-spinner'
 
 ARBITRARY_DELAY_TO_PLEASE_THE_EYES = (0.8..1.2)
 
