@@ -1,15 +1,15 @@
 #!/usr/bin/env ruby
 
-require 'burdened-acrobat'
-require 'moneta'
-require 'path53'
-require 'pastel'
-
 if ENV['HACKING']
   require_relative '../lib/cloudstrap'
 else
   require 'cloudstrap'
 end
+
+require 'burdened-acrobat'
+require 'moneta'
+require 'path53'
+require 'pastel'
 
 gem = Gem::Specification
       .find_all_by_name('cloudstrap')
