@@ -1,12 +1,12 @@
 #!/usr/bin/env ruby
 
-require 'pastel'
-
 if ENV['HACKING']
   require_relative '../lib/cloudstrap'
 else
   require 'cloudstrap'
 end
+
+require 'pastel'
 
 gem = Gem::Specification
       .find_all_by_name('cloudstrap')
@@ -17,6 +17,13 @@ version = Regexp.union(/^-[vV]$/, /--?version/)
 
 if ARGV.any? { |arg| arg =~ version }
   puts "#{gem.name} v#{gem.version}"
+  exit
+end
+
+help = Regexp.union(/^-h$/, /^--?help$/)
+
+if ARGV.any? { |arg| arg =~ version }
+  puts "usage: cloudstrap"
   exit
 end
 
