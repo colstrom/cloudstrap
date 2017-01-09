@@ -11,7 +11,11 @@ module Cloudstrap
 
     Contract None => String
     def region
-      lookup(:region) { 'us-west-2' }
+      lookup(:region) do
+        ENV.fetch('AWS_REGION') do
+          ENV.fetch('AWS_DEFAULT_REGION') { 'us-west-2' }
+        end
+      end
     end
 
     Contract None => String
