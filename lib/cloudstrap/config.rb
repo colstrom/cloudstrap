@@ -232,6 +232,11 @@ module Cloudstrap
       required :domain_name
     end
 
+    Contract None => String
+    def hooks_dir
+      lookup(:hooks_dir) { [workdir, 'hooks'].join('/') }
+    end
+
     private
 
     Contract None => ::Pastel::Delegator
