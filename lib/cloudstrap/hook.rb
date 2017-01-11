@@ -1,5 +1,6 @@
 require_relative 'cache'
 require_relative 'config'
+require_relative 'ssh/client'
 
 module Cloudstrap
   class Hook
