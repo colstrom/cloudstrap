@@ -237,6 +237,11 @@ module Cloudstrap
       lookup(:hooks_dir) { [workdir, 'hooks'].join('/') }
     end
 
+    Contract None => String
+    def remote_hooks_dir
+      lookup(:remote_hooks_dir) { '.cloudstrap/hooks' }
+    end
+
     private
 
     Contract None => ::Pastel::Delegator
