@@ -1,3 +1,4 @@
+require_relative 'cache'
 require_relative 'config'
 
 module Cloudstrap
