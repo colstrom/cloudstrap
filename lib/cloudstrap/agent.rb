@@ -6,6 +6,7 @@ require_relative 'amazon'
 require_relative 'config'
 require_relative 'errors'
 require_relative 'hcp/bootstrap_properties'
+require_relative 'hooks'
 require_relative 'network'
 require_relative 'ssh'
 
@@ -13,6 +14,7 @@ module Cloudstrap
   class Agent
     include ::Contracts::Core
     include ::Contracts::Builtin
+    include Hooks
 
     Contract None => Agent
     def initialize
@@ -435,20 +437,22 @@ module Cloudstrap
       properties = bootstrap_properties.file
       package = config.hcp_package_url
 
-      ssh.to(jumpbox_ip) do
-        '/home/ubuntu/.ssh/id_rsa'.tap do |target|
-          execute :rm, '-f', target
-          upload! private_key, target
-          execute :chmod, '-w', target
-        end
+      hooking(:setup) do
+        ssh.to(jumpbox_ip) do
+          '/home/ubuntu/.ssh/id_rsa'.tap do |target|
+            execute :rm, '-f', target
+            upload! private_key, target
+            execute :chmod, '-w', target
+          end
 
-        upload! properties, '/home/ubuntu/bootstrap.properties'
+          upload! properties, '/home/ubuntu/bootstrap.properties'
 
-        as :root do
-          execute :apt, *%w(install --assume-yes genisoimage aria2)
-          execute :rm, '-f', '/opt/bootstrap.deb'
-          execute :aria2c, '--continue=true', '--dir=/opt', '--out=bootstrap.deb', package
-          execute :dpkg, *%w(--install /opt/bootstrap.deb)
+          as :root do
+            execute :apt, *%w(install --assume-yes genisoimage aria2)
+            execute :rm, '-f', '/opt/bootstrap.deb'
+            execute :aria2c, '--continue=true', '--dir=/opt', '--out=bootstrap.deb', package
+            execute :dpkg, *%w(--install /opt/bootstrap.deb)
+          end
         end
       end
     end
