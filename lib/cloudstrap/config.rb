@@ -242,6 +242,11 @@ module Cloudstrap
       lookup(:remote_hooks_dir) { '.cloudstrap/hooks' }
     end
 
+    Contract None => Pos
+    def maximum_availability_zones
+      lookup(:maximum_availability_zones) { '3' }.to_i
+    end
+
     private
 
     Contract None => ::Pastel::Delegator
