@@ -247,6 +247,11 @@ module Cloudstrap
       lookup(:maximum_availability_zones) { '3' }.to_i
     end
 
+    Contract None => Pos
+    def minimum_availability_zones
+      lookup(:minimum_availability_zones) { '1' }.to_i
+    end
+
     private
 
     Contract None => ::Pastel::Delegator
