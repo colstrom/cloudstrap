@@ -424,7 +424,7 @@ module Cloudstrap
       Contract None => ArrayOf[Aws::EC2::Types::AvailabilityZone]
       def availability_zones!
         @availability_zones = call_api(:describe_availability_zones)
-                                .availability_zones
+                                .availability_zones.take(config.maximum_availability_zones)
       end
 
       Contract None => ArrayOf[Aws::EC2::Types::AvailabilityZone]
