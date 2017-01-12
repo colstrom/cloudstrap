@@ -439,6 +439,11 @@ module Cloudstrap
 
       private
 
+      Contract Maybe[Pos] => Func[Enumerable => Enumerable]
+      def at_least(minimum = 0)
+        ->(list) { list.size >= minimum ? list : list.cycle }
+      end
+
       def client
         Aws::EC2::Client
       end
