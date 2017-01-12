@@ -503,6 +503,13 @@ module Cloudstrap
       @config ||= Config.new
     end
 
+    Contract RespondTo[:to_s] => Maybe[Any]
+    def environment(variable)
+      ENV.fetch("#{config.environment_namespace}_#{variable.to_s.upcase}") do
+        yield if block_given?
+      end
+    end
+
     Contract None => Moneta::Proxy
     def cache
       @cache ||= Moneta.new :File, dir: config.cache_path
