@@ -252,6 +252,11 @@ module Cloudstrap
       lookup(:minimum_availability_zones) { '1' }.to_i
     end
 
+    Contract None => String
+    def environment_namespace
+      lookup(:environment_namespace) { 'CLOUDSTRAP' }.upcase
+    end
+
     private
 
     Contract None => ::Pastel::Delegator
