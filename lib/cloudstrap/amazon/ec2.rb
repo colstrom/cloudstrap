@@ -211,7 +211,8 @@ module Cloudstrap
                ] => ::Aws::EC2::Instance
       def create_instance(**properties)
         reservation = call_api(:run_instances, properties.merge(min_count: 1, max_count: 1))
-        instance = ::Aws::EC2::Instance.new reservation.instances.first.instance_id
+        instance = ::Aws::EC2::Instance
+          .new(reservation.instances.first.instance_id, region: config.region)
         instance.wait_until_running.tap { instances! }
       end
 
@@ -277,7 +278,7 @@ module Cloudstrap
       Contract None => ::Aws::EC2::Vpc
       def create_vpc
         response = call_api(:create_vpc, cidr_block: config.vpc_cidr_block).vpc
-        ::Aws::EC2::Vpc.new(response.vpc_id)
+        ::Aws::EC2::Vpc.new(response.vpc_id, region: config.region)
           .wait_until_available
           .tap { vpcs! }
       end
@@ -321,7 +322,7 @@ module Cloudstrap
       def create_subnet(**properties)
         response = call_api(:create_subnet, properties).subnet
         Aws::EC2::Subnet
-          .new(response.subnet_id)
+          .new(response.subnet_id, region: config.region)
           .wait_until { |subnet| subnet.state == 'available' }
           .tap { subnets! }
       rescue ::Aws::EC2::Errors::InvalidSubnetConflict
