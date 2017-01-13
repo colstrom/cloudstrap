@@ -25,7 +25,7 @@ config = Cloudstrap::Config.new
 green = Pastel.new.green.detach
 red = Pastel.new.red.detach
 
-cloudstrap = (CLOUDSTRAP_VERSION.end_with?('pre') ? red : green).call CLOUDSTRAP_VERSION
+cloudstrap = ((CLOUDSTRAP_VERSION.nil? || CLOUDSTRAP_VERSION.end_with?('pre')) ? red : green).call CLOUDSTRAP_VERSION
 latest = ->(component) { config.send(:latest).send(component) }
 using  = ->(component) { config.send("#{component}_version") }
 
