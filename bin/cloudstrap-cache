@@ -1,0 +1,30 @@
+#!/usr/bin/env ruby
+
+require 'tty-table'
+require 'pastel'
+
+if ENV['HACKING']
+  require_relative '../lib/cloudstrap/cache'
+  require_relative '../lib/cloudstrap/config'
+else
+  require 'cloudstrap/cache'
+  require 'cloudstrap/config'
+end
+
+PROGRAM_NAME = File.basename $PROGRAM_NAME
+
+config = Cloudstrap::Config.new
+cache = Cloudstrap::Cache.new
+
+KEYS = Dir
+         .entries(config.cache_path)
+         .reject { |entry| %w(. .. .keys).include? entry }
+         .map { |key| key.gsub(/^(%[0-9A-F]{2,2})+/, '') }
+         .map(&:to_sym)
+         .sort
+
+table = TTY::Table.new(headers: %w(key value)) do |table|
+  KEYS.each { |key| table << [key, cache.get(key)] }
+end
+
+puts table.render(STDOUT.tty? ? :unicode : :basic)
