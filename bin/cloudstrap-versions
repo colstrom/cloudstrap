@@ -1,14 +1,14 @@
 #!/usr/bin/env ruby
 
+require 'faraday'
+require 'tty-table'
+require 'pastel'
+
 if ENV['HACKING']
   require_relative '../lib/cloudstrap'
 else
   require 'cloudstrap'
 end
-
-require 'faraday'
-require 'tty-table'
-require 'pastel'
 
 CLOUDSTRAP_VERSION = $LOADED_FEATURES
                        .map { |f| f.match %r{cloudstrap-(?<version>[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+(\.pre)?)} }
