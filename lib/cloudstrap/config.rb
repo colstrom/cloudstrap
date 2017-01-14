@@ -12,9 +12,7 @@ module Cloudstrap
     Contract None => String
     def region
       lookup(:region) do
-        ENV.fetch('AWS_REGION') do
-          ENV.fetch('AWS_DEFAULT_REGION') { 'us-west-2' }
-        end
+        Aws::EC2::Client.new.config.region || 'us-west-2'
       end
     end
 
