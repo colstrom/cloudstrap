@@ -39,9 +39,10 @@ module Cloudstrap
       return false unless exists?
 
       [local, remote].tap do |local_file, remote_file|
-        ssh.to(host) {
+        ssh.to(host) do
           execute :mkdir, '-p', File.dirname(remote_file)
-          upload! local_file, remote_file }
+          upload! local_file, remote_file
+        end
       end
     end
 
