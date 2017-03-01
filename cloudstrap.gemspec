@@ -28,5 +28,5 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'tty-spinner', '~> 0.4', '>= 0.4.1'
   gem.add_runtime_dependency 'tty-table', '~> 0.6', '>= 0.6.0'
 
-  gem.add_runtime_dependency 'pastel', '~> 0.6', '>= 0.6.0'
+  gem.add_runtime_dependency 'pastel', '~> 0.7', '>= 0.7.0'
 end
