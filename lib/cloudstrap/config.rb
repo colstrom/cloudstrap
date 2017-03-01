@@ -312,7 +312,9 @@ EOS
 
     Contract None => String
     def file
-      @file ||= ENV.fetch('BOOTSTRAP_CONFIG_FILE') { 'config.yaml' }
+      @file ||= ENV.fetch('BOOTSTRAP_CONFIG_FILE') do
+        %w(config.yaml config.yml).find { |f| File.exist? "#{dir}/#{f}" }
+      end
     end
 
     Contract None => String
