@@ -25,7 +25,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'retries', '~> 0.0.5', '>= 0.0.5'
   gem.add_runtime_dependency 'sshkey', '~> 1.8', '>= 1.8.0'
   gem.add_runtime_dependency 'sshkit', '~> 1.11', '>= 1.11.0'
-  gem.add_runtime_dependency 'tty-spinner', '~> 0.4', '>= 0.4.1'
+  gem.add_runtime_dependency 'tty-spinner', '~> 0.4', '>= 0.4.0'
   gem.add_runtime_dependency 'tty-table', '~> 0.8', '>= 0.8.0'
 
   gem.add_runtime_dependency 'pastel', '~> 0.7', '>= 0.7.0'
