@@ -22,6 +22,11 @@ module Cloudstrap
     end
 
     Contract None => String
+    def subnet_bits
+      lookup(:subnet_bits) { '24' }
+    end
+
+    Contract None => String
     def vpc_cidr_block
       lookup(:vpc_cidr_block) { '10.0.0.0/16' }
     end
