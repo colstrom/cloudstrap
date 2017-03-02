@@ -33,7 +33,7 @@ module Cloudstrap
 
     Contract None => String
     def vpc_cidr_block
-      lookup(:vpc_cidr_block) { '10.0.0.0/16' }
+      lookup(:vpc_cidr_block) { "10.0.0.0/#{network_bits}" }
     end
 
     Contract None => String
