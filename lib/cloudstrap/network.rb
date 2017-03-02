@@ -4,14 +4,14 @@ require_relative 'config'
 module Cloudstrap
   class Network
     def initialize(network = '10.0.0.0')
-      @network = IPAddress(network).tap { |n| n.prefix = 16 }
+      @network = IPAddress(network).tap { |n| n.prefix = config.network_bits.to_i }
       self
     end
 
     attr_reader :network
 
     def subnets
-      @subnets ||= network.subnet 24
+      @subnets ||= network.subnet config.subnet_bits.to_i
     end
 
     def public
