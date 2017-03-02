@@ -1,4 +1,5 @@
 require 'ipaddress'
+require_relative 'config'
 
 module Cloudstrap
   class Network
@@ -40,6 +41,12 @@ module Cloudstrap
         public: public_layout(*zones),
         private: private_layout(*zones)
       }
+    end
+
+    private
+
+    def config
+      @config ||= Config.new
     end
   end
 end
