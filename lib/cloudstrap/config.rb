@@ -39,7 +39,7 @@ module Cloudstrap
     Contract None => String
     def public_cidr_block
       lookup(:public_cidr_block) do
-        vpc_cidr_block.gsub(/([[:digit:]]{1,3}\.?){2,2}\/[[:digit:]]{1,2}$/, '0.0/24')
+        vpc_cidr_block.gsub(/([[:digit:]]{1,3}\.?){2,2}\/[[:digit:]]{1,2}$/, "0.0/#{subnet_bits}")
       end
     end
 
