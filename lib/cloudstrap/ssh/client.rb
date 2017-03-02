@@ -21,9 +21,9 @@ module Cloudstrap
         self
       end
 
-      Contract String, Proc => Any
+      Contract String, Maybe[Proc] => Any
       def to(host, &block)
-        ::SSHKit::Coordinator.new("#{config.ssh_username}@#{host}").each(&block)
+        ::SSHKit::Coordinator.new("#{config.ssh_username}@#{host}")
       end
 
       private

@@ -438,7 +438,7 @@ module Cloudstrap
       package = config.hcp_package_url
 
       hooking(:setup) do
-        ssh.to(jumpbox_ip) do
+        ssh.to(jumpbox_ip).each do
           '/home/ubuntu/.ssh/id_rsa'.tap do |target|
             execute :rm, '-f', target
             upload! private_key, target
