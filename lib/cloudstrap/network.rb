@@ -15,11 +15,11 @@ module Cloudstrap
     end
 
     def public
-      @public ||= subnets.select { |subnet| subnet.octet(2).even? }
+      @public ||= subnets.each_with_index.select { |_subnet, index| index.even? }.map(&:first)
     end
 
     def private
-      @private ||= subnets.select { |subnet| subnet.octet(2).odd? }
+      @private ||= subnets.each_with_index.select { |_subnet, index| index.odd? }.map(&:first)
     end
 
     def public_layout(*zones)
