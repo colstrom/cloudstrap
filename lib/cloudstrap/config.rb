@@ -22,6 +22,11 @@ module Cloudstrap
     end
 
     Contract None => String
+    def network_bits
+      lookup(:network_bits) { '16' }
+    end
+
+    Contract None => String
     def subnet_bits
       lookup(:subnet_bits) { '24' }
     end
