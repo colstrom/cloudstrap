@@ -40,7 +40,7 @@ abort "Invalid Zone: #{DOMAIN}" unless ZONE
 load_balancers = BurdenedAcrobat::LoadBalancers.new
 
 elbs = load_balancers.search { tagged('KubernetesCluster') & with(VPC) }
-abort "No clusters found in #{vpc_id}. Unable to proceed." if elbs.empty?
+abort "No clusters found in #{VPC}. Unable to proceed." if elbs.empty?
 
 clusters = load_balancers.tags(elbs).flat_map do |lb|
   lb.tags.select { |tag| tag.key == 'KubernetesCluster' }.map(&:value)
