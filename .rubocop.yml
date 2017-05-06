@@ -1,0 +1,5 @@
+---
+
+Style:
+  LambdaCall:
+    Enabled: false
