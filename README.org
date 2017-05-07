@@ -2,6 +2,21 @@
 #+SUBTITLE: Strapping Boots to Clouds
 #+LATEX: \pagebreak
 
+* Status
+
+  Cloudstrap is not being actively developed right now, due to lack of available
+  AWS resources for testing. The current release (=0.49.4=) is feature-complete,
+  with few known bugs (see Issues on GitHub).
+
+  - Issues should still be reported, and will be fixed if development resumes.
+  - Pull Requests are welcome, and will continue to be reviewed.
+
+  There are a few very minor changes I would like to see before I would be
+  comfortable calling this =1.0.0=, mostly regarding namespacing of environment
+  variables (=BOOTSTRAP_*= -> =CLOUDSTRAP_*=), and restructuring the CLI
+  (~cloudstrap-teardown~ is not Cloudstrap-specific, and should be a standalone
+  tool).
+
 * Overview
 
 =cloudstrap= straps your boots to the cloud. Think of it as sort of a
