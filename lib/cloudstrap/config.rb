@@ -67,7 +67,7 @@ module Cloudstrap
 
     Contract None => String
     def node_instance_type
-      lookup(:node_instance_type) { 'm4.xlarge' }
+      lookup(:node_instance_type) { 'm4.2xlarge' }
     end
 
     Contract None => String
