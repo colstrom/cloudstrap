@@ -14,6 +14,9 @@ Gem::Specification.new do |gem|
   gem.executables   = `git ls-files -z -- bin/*`.split("\x0").map { |f| File.basename(f) }
   gem.require_paths = ['lib']
 
+  gem.cert_chain  = ['trust/certificates/colstrom.pem']
+  gem.signing_key = File.expand_path ENV.fetch 'GEM_SIGNING_KEY'
+
   gem.add_runtime_dependency 'aws-sdk',          '~> 2.7',   '>= 2.7.0'
   gem.add_runtime_dependency 'burdened-acrobat', '~> 0.3',   '>= 0.3.4'
   gem.add_runtime_dependency 'concurrent-ruby',  '~> 1.0',   '>= 1.0.0'
