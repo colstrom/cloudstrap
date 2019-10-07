@@ -68,6 +68,15 @@ end
 
 wait_a_bit unless user_wants_to_go_fast?
 
+task[:detachable_network_interfaces] = Concurrent.dataflow(task[:vpcs]) do |vpcs|
+  show.("Discovering Detachable Network Interfaces in #{vpcs.size} VPCs") do
+    eager.(:network_interfaces).(vpcs)
+      .reject { |network_interface| network_interface.attachment && network_interface.attachment.device_index.zero? }
+  end
+end
+
+wait_a_bit unless user_wants_to_go_fast?
+
 task[:subnets] = Concurrent.dataflow(task[:vpcs]) do |vpcs|
   show.("Discovering Subnets in #{vpcs.size} VPCs") do
     eager.(:subnets).(vpcs)
@@ -160,6 +169,24 @@ end
 
 wait_a_bit unless user_wants_to_go_fast?
 
+task[:network_interfaces_detached] = Concurrent.dataflow(task[:detachable_network_interfaces]) do |network_interfaces|
+  show.("Detaching #{network_interfaces.size} Network Interfaces") do
+    network_interfaces.each do |network_interface|
+      network_interface.detach if network_interface.attachment
+    end
+  end
+end
+
+wait_a_bit unless user_wants_to_go_fast?
+
+task[:network_interfaces_deleted] = Concurrent.dataflow(task[:network_interfaces_detached]) do |network_interfaces|
+  show.("Deleting #{network_interfaces.size} Network Interfaces") do
+    network_interfaces.map(&:delete)
+  end
+end
+
+wait_a_bit unless user_wants_to_go_fast?
+
 task[:instances_relocated] = Concurrent.dataflow(task[:instances], task[:security_groups]) do |instances, security_groups|
   show.("Relocating #{instances.size} Instances to #{security_groups.size} Default Security Groups") do
     instances.map do |instance|
@@ -233,7 +260,7 @@ end
 
 wait_a_bit unless user_wants_to_go_fast?
 
-task[:security_groups_deleted] = Concurrent.dataflow(task[:security_groups], task[:sg_ingress_revoked], task[:sg_egress_revoked]) do |all_security_groups|
+task[:security_groups_deleted] = Concurrent.dataflow(task[:security_groups], task[:sg_ingress_revoked], task[:sg_egress_revoked], task[:network_interfaces_deleted]) do |all_security_groups|
   security_groups = all_security_groups.reject { |sg| sg.group_name == 'default' }
   show.("Deleting #{security_groups.size} Security Groups") do
     security_groups.map(&:delete)
@@ -242,7 +269,7 @@ end
 
 wait_a_bit unless user_wants_to_go_fast?
 
-task[:subnets_deleted] = Concurrent.dataflow(task[:subnets]) do |subnets|
+task[:subnets_deleted] = Concurrent.dataflow(task[:subnets], task[:network_interfaces_deleted]) do |subnets|
   show.("Deleting #{subnets.size} Subnets") do
     subnets.map(&:delete)
   end
@@ -250,7 +277,7 @@ end
 
 wait_a_bit unless user_wants_to_go_fast?
 
-task[:routes_deleted] = Concurrent.dataflow(task[:routes]) do |all_routes|
+task[:routes_deleted] = Concurrent.dataflow(task[:routes], task[:network_interfaces_deleted]) do |all_routes|
   routes = all_routes.reject { |route| route.gateway_id == 'local' }
   show.("Deleting #{routes.size} Routes") do
     routes.map(&:delete)
