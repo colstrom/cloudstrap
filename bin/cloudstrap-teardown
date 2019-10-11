@@ -170,6 +170,16 @@ end
 wait_a_bit unless user_wants_to_go_fast?
 
 task[:network_interfaces_detached] = Concurrent.dataflow(task[:detachable_network_interfaces]) do |network_interfaces|
+task[:classic_elbs_deleted] = Concurrent.dataflow(task[:classic_elbs]) do |classic_elbs|
+  show.("Deleting #{classic_elbs.size} Classic Load Balancers") do
+    classic_elbs.each do |classic_elb|
+      Aws::ElasticLoadBalancing::Client.new.delete_load_balancer(load_balancer_name: classic_elb.load_balancer_name)
+    end
+  end
+end
+
+wait_a_bit unless user_wants_to_go_fast?
+
   show.("Detaching #{network_interfaces.size} Network Interfaces") do
     network_interfaces.each do |network_interface|
       network_interface.detach if network_interface.attachment
